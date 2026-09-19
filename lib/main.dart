@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:tokopedia/widgets/promo_banner.dart';
+import 'widgets/search_bar_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +21,14 @@ class MyApp extends StatelessWidget {
         ),
         body: const Padding(
           padding: EdgeInsets.all(16),
-          child: SearchBarWidget(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SearchBarWidget(),
+              SizedBox(height: 16),
+              PromoBanner(),
+            ],
+          ),
         ),
       ),
     );
