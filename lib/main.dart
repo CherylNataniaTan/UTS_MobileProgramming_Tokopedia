@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:tokopedia/widgets/promo_banner.dart';
 import 'widgets/search_bar_widget.dart';
+import 'widgets/category_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +27,13 @@ class MyApp extends StatelessWidget {
               SearchBarWidget(),
               SizedBox(height: 16),
               PromoBanner(),
+              SizedBox(height: 16),
+              Text(
+                'Kategori',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize:16),
+              ),
+              SizedBox(height: 8),
+              CategoryList(),
             ],
           ),
         ),
