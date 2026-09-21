@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tokopedia/widgets/promo_banner.dart';
 import 'widgets/search_bar_widget.dart';
+import 'widgets/promo_banner.dart';
 import 'widgets/category_list.dart';
+import 'widgets/product_grid.dart';
+import 'data/dummy_products.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -19,21 +22,28 @@ class MyApp extends StatelessWidget {
           title: const Text('Marketplace'),
           backgroundColor: Colors.green,
         ),
-        body: const Padding(
+        body: SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SearchBarWidget(),
-              SizedBox(height: 16),
-              PromoBanner(),
-              SizedBox(height: 16),
-              Text(
+              const SearchBarWidget(),
+              const SizedBox(height: 16),
+              const PromoBanner(),
+              const SizedBox(height: 16),
+              const Text(
                 'Kategori',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize:16),
               ),
-              SizedBox(height: 8),
-              CategoryList(),
+              const SizedBox(height: 8),
+              const CategoryList(),
+              const SizedBox(height: 16),
+              const Text(
+                'Rekomendasi Untukmu',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+              ProductGrid(products: dummyProducts),
             ],
           ),
         ),
@@ -42,33 +52,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class SearchBarWidget extends StatelessWidget {
-  const SearchBarWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: const Row(
-        children: [
-          Icon(
-            Icons.search,
-            color: Colors.grey,
-          ),
-          SizedBox(width: 10),
-          Text(
-            'Search',
-            style: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
