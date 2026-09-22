@@ -40,11 +40,13 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: const Color(0xFFA4101E),
         elevation: 0,
 
-        // Logo menggunakan icon, jadi tidak perlu assets
-        leading: const Icon(
-          Icons.shopping_bag_outlined,
-          color: Colors.white,
-          size: 32,
+        // LOGO ASLI UNTARIANMART
+        leading: Padding(
+          padding: const EdgeInsets.all(7),
+          child: Image.asset(
+            'assets/logo.png',
+            fit: BoxFit.contain,
+          ),
         ),
 
         title: const Text(
@@ -56,7 +58,6 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
 
-        // Icon keranjang di kanan
         actions: [
           IconButton(
             onPressed: () {},
