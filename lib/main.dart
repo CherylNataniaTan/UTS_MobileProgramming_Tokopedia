@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: const Text(
-                'Marketplace',
+                'UntarianMart',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
