@@ -66,6 +66,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-extension on MyApp {
-  get dummyProducts => null;
-}
