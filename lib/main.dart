@@ -40,12 +40,11 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: const Color(0xFFA4101E),
         elevation: 0,
 
-        leading: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Image.asset(
-            'assets/logo.png',
-            fit: BoxFit.contain,
-          ),
+        // Logo menggunakan icon, jadi tidak perlu assets
+        leading: const Icon(
+          Icons.shopping_bag_outlined,
+          color: Colors.white,
+          size: 32,
         ),
 
         title: const Text(
@@ -57,6 +56,7 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
 
+        // Icon keranjang di kanan
         actions: [
           IconButton(
             onPressed: () {},
@@ -71,11 +71,9 @@ class MyHomePage extends StatelessWidget {
 
       body: const SingleChildScrollView(
         child: Column(
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SearchWidget(),
-
             CategoryWidget(),
           ],
         ),

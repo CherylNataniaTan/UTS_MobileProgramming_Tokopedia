@@ -71,33 +71,24 @@ class _SearchWidgetState extends State<SearchWidget> {
           searchProduct();
         },
 
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'Cari di UntarianMart...',
 
-          hintStyle: const TextStyle(
+          hintStyle: TextStyle(
             color: Colors.grey,
             fontSize: 16,
           ),
 
-          prefixIcon: const Icon(
+          // CUMA SATU ICON SEARCH DI KIRI
+          prefixIcon: Icon(
             Icons.search,
             color: Color(0xFFA4101E),
             size: 30,
           ),
 
-          suffixIcon: IconButton(
-            onPressed: searchProduct,
-            icon: const Icon(
-              Icons.search,
-              color: Color(0xFFA4101E),
-              size: 30,
-            ),
-          ),
-
           border: InputBorder.none,
 
-          contentPadding:
-              const EdgeInsets.symmetric(
+          contentPadding: EdgeInsets.symmetric(
             vertical: 19,
           ),
         ),

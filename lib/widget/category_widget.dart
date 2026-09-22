@@ -36,10 +36,6 @@ class CategoryWidget extends StatelessWidget {
       'icon': Icons.directions_run,
       'name': 'Sepatu',
     },
-    {
-      'icon': Icons.more_horiz,
-      'name': 'Lainnya',
-    },
   ];
 
   void categoryClicked(
