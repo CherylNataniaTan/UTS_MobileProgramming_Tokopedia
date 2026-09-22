@@ -4,6 +4,7 @@ import 'widgets/promo_banner.dart';
 import 'widgets/category_list.dart';
 import 'widgets/product_grid.dart';
 import 'data/dummy_products.dart';
+import 'screens/cart_screen.dart';
 
 
 void main() {
@@ -21,6 +22,20 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Marketplace'),
           backgroundColor: Colors.green,
+
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartScreen(),
+                    ),
+                  );
+              },
+            )
+          ],
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -51,4 +66,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
