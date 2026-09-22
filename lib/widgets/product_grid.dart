@@ -64,7 +64,10 @@ class ProductGrid extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Rp${product.price}',
+                      'Rp ${product.price.toString().replaceAllMapped(
+                      RegExp(r'\B(?=(\d{3})+(?!\d))'),
+                      (match) => '.',
+                    )}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: primaryRed,
