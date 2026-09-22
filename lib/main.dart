@@ -1,3 +1,5 @@
+import 'search/search_screen.dart';
+import 'category/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'widgets/search_bar_widget.dart';
 import 'widgets/promo_banner.dart';
@@ -21,6 +23,30 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Marketplace'),
           backgroundColor: Colors.green,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchScreen(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.category),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CategoryScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16),
