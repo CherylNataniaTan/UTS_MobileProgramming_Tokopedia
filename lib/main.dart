@@ -16,10 +16,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'UntarianMart',
      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Marketplace'),
+          title: const Text('UntarianMart'),
           backgroundColor: Colors.green,
         ),
         body: SingleChildScrollView(
