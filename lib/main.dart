@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'widget/category_widget.dart';
 import 'widget/search_widget.dart';
+import 'widget/product_showcase_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -91,7 +92,10 @@ class MyHomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SearchWidget(),
+
             CategoryWidget(),
+
+            ProductShowcaseWidget(),
           ],
         ),
       ),
