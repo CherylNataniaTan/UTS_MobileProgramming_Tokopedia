@@ -50,7 +50,7 @@ class MyHomePage extends StatelessWidget {
                 child: Transform.scale(
                   scale: 3.5,
                   child: Image.asset(
-                    'assets/logo.png',
+                    'assets/logo.jpeg',
                     fit: BoxFit.contain,
                   ),
                 ),
