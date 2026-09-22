@@ -41,69 +41,51 @@ class MyHomePage extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
 
-        title: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: 500,
-            ),
-
-            child: Row(
-              children: [
-                // LOGO ASLI
-                SizedBox(
-                  width: 42,
-                  height: 42,
-                  child: SizedBox(
-                    width: 48,
-                    height: 48,
-                    child: ClipRect(
-                      child: Image.asset(
-                        'assets/logo.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+        title: Row(
+          children: [
+            SizedBox(
+              width: 52,
+              height: 52,
+              child: ClipRect(
+                child: Transform.scale(
+                  scale: 3.5,
+                  child: Image.asset(
+                    'assets/logo.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
-
-                const SizedBox(width: 10),
-
-                const Text(
-                  'UntarianMart',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const Spacer(),
-
-                const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ],
+              ),
             ),
-          ),
+
+            const SizedBox(width: 8),
+
+            const Text(
+              'UntarianMart',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const Spacer(),
+
+            const Icon(
+              Icons.shopping_cart_outlined,
+              color: Colors.white,
+              size: 28,
+            ),
+          ],
         ),
       ),
 
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 500,
-          ),
-
-          child: const SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SearchWidget(),
-                CategoryWidget(),
-              ],
-            ),
-          ),
+      body: const SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SearchWidget(),
+            CategoryWidget(),
+          ],
         ),
       ),
     );

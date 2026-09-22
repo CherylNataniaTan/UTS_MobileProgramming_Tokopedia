@@ -45,7 +45,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     return Container(
       margin: const EdgeInsets.fromLTRB(
         18,
-        18,
+        12,
         18,
         20,
       ),
