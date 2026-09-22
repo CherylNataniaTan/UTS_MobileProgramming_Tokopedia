@@ -11,26 +11,129 @@ class _SearchWidgetState extends State<SearchWidget> {
   final TextEditingController searchController =
       TextEditingController();
 
+  // Daftar kategori yang bisa dicari
+  final List<String> categories = [
+    'Elektronik',
+    'Kecantikan',
+    'Makanan',
+    'Rumah',
+    'Laptop',
+    'Gaming',
+    'Tas',
+    'Sepatu',
+  ];
+
   void searchProduct() {
     String keyword = searchController.text.trim();
 
+    // Jika pencarian kosong
     if (keyword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Masukkan produk yang ingin dicari',
-          ),
-          duration: Duration(seconds: 1),
-        ),
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(
+              'Pencarian Kosong',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: const Text(
+              'Masukkan produk yang ingin dicari.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Oke',
+                  style: TextStyle(
+                    color: Color(0xFFA4101E),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       );
+
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Mencari: $keyword'),
-        duration: const Duration(seconds: 2),
-      ),
+    // Mengecek apakah keyword ada di daftar kategori
+    bool found = categories.any(
+      (category) =>
+          category.toLowerCase() == keyword.toLowerCase(),
+    );
+
+    // Jika kategori tidak ditemukan
+    if (!found) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(
+              'Produk Tidak Ditemukan',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: Text(
+              '"$keyword" tidak ditemukan.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Oke',
+                  style: TextStyle(
+                    color: Color(0xFFA4101E),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+
+      return;
+    }
+
+    // Jika kategori ditemukan
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Produk Ditemukan',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            'Kategori "$keyword" ditemukan.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Oke',
+                style: TextStyle(
+                  color: Color(0xFFA4101E),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -49,13 +152,10 @@ class _SearchWidgetState extends State<SearchWidget> {
         18,
         20,
       ),
-
       height: 62,
-
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -64,25 +164,23 @@ class _SearchWidgetState extends State<SearchWidget> {
           ),
         ],
       ),
-
       child: TextField(
         controller: searchController,
-
         textInputAction: TextInputAction.search,
 
+        // Tekan Enter/Search di keyboard
         onSubmitted: (_) {
           searchProduct();
         },
 
         decoration: const InputDecoration(
           hintText: 'Cari di UntarianMart...',
-
           hintStyle: TextStyle(
             color: Colors.grey,
             fontSize: 16,
           ),
 
-          // SATU SEARCH ICON SAJA
+          // Hanya satu icon search di sebelah kiri
           prefixIcon: Icon(
             Icons.search,
             color: Color(0xFFA4101E),
