@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../data/dummy_products.dart';
 import 'search_result_tile.dart';
 
@@ -13,6 +14,11 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
 
   String searchQuery = '';
+
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+  static const Color gray = Color(0xFF575757);
+  static const Color lightGray = Color(0xFFDADAD9);
 
   @override
   void dispose() {
@@ -31,6 +37,8 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cari Produk'),
+        backgroundColor: primaryRed,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -45,20 +53,40 @@ class _SearchScreenState extends State<SearchScreen> {
               },
               decoration: InputDecoration(
                 hintText: 'Cari produk...',
-                prefixIcon: const Icon(Icons.search),
+                hintStyle: const TextStyle(
+                  color: gray,
+                ),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: primaryRed,
+                ),
                 suffixIcon: searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear),
+                        icon: const Icon(
+                          Icons.clear,
+                          color: primaryRed,
+                        ),
                         onPressed: () {
                           searchController.clear();
+
                           setState(() {
                             searchQuery = '';
                           });
                         },
                       )
                     : null,
-                border: OutlineInputBorder(
+                focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: primaryRed,
+                    width: 2,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: lightGray,
+                  ),
                 ),
               ),
             ),
@@ -66,7 +94,12 @@ class _SearchScreenState extends State<SearchScreen> {
             Expanded(
               child: filteredProducts.isEmpty
                   ? const Center(
-                      child: Text('Produk tidak ditemukan'),
+                      child: Text(
+                        'Produk tidak ditemukan',
+                        style: TextStyle(
+                          color: darkRed,
+                        ),
+                      ),
                     )
                   : ListView.builder(
                       itemCount: filteredProducts.length,

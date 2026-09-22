@@ -9,10 +9,16 @@ class SearchResultTile extends StatelessWidget {
     required this.product,
   });
 
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+  static const Color gray = Color(0xFF575757);
+  static const Color orange = Color(0xFFE89D2D);
+
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
+      elevation: 2,
       child: ListTile(
         contentPadding: const EdgeInsets.all(8),
         leading: ClipRRect(
@@ -28,6 +34,10 @@ class SearchResultTile extends StatelessWidget {
           product.name,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            color: darkRed,
+          ),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +47,7 @@ class SearchResultTile extends StatelessWidget {
               'Rp${product.price}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.green,
+                color: primaryRed,
               ),
             ),
             const SizedBox(height: 4),
@@ -46,10 +56,15 @@ class SearchResultTile extends StatelessWidget {
                 const Icon(
                   Icons.star,
                   size: 14,
-                  color: Colors.orange,
+                  color: orange,
                 ),
                 const SizedBox(width: 4),
-                Text('${product.rating}'),
+                Text(
+                  '${product.rating}',
+                  style: const TextStyle(
+                    color: gray,
+                  ),
+                ),
               ],
             ),
           ],

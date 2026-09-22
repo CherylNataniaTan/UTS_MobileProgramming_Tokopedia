@@ -6,6 +6,12 @@ class ProductGrid extends StatelessWidget {
 
   const ProductGrid({super.key, required this.products});
 
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+  static const Color gray = Color.fromARGB(255, 87, 87, 87);
+  static const Color lightGray = Color(0xFFDADAD9);
+  static const Color orange = Color(0xFFE89D2D);
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -20,9 +26,12 @@ class ProductGrid extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         final product = products[index];
+
         return Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[300]!),
+            border: Border.all(
+              color: lightGray,
+            ),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
@@ -49,19 +58,32 @@ class ProductGrid extends StatelessWidget {
                       product.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: gray,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'Rp${product.price}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: primaryRed,
                       ),
                     ),
                     Row(
                       children: [
-                        const Icon(Icons.star, size: 14, color: Colors.orange),
-                        Text(' ${product.rating}', style: const TextStyle(fontSize: 12)),
+                        const Icon(
+                          Icons.star,
+                          size: 14,
+                          color: orange,
+                        ),
+                        Text(
+                          ' ${product.rating}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: gray,
+                          ),
+                        ),
                       ],
                     ),
                   ],

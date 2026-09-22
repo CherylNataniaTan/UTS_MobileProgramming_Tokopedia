@@ -17,17 +17,26 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
       home: Builder(
         builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Marketplace'),
-              backgroundColor: Colors.green,
+              title: const Text(
+                'Marketplace',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              backgroundColor: primaryRed,
+              foregroundColor: Colors.white,
               actions: [
                 IconButton(
                   icon: const Icon(Icons.search),
@@ -53,7 +62,6 @@ class MyApp extends StatelessWidget {
                 ),
               ],
             ),
-
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -72,6 +80,7 @@ class MyApp extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
+                      color: darkRed,
                     ),
                   ),
 
@@ -86,6 +95,7 @@ class MyApp extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
+                      color: darkRed,
                     ),
                   ),
 

@@ -12,6 +12,10 @@ class CategoryFilterChip extends StatelessWidget {
     required this.onSelected,
   });
 
+  static const Color green = Color.fromARGB(255, 46, 82, 53);
+  static const Color gray = Color(0xFF575757);
+  static const Color lightGray = Color(0xFFDADAD9);
+
   @override
   Widget build(BuildContext context) {
     return FilterChip(
@@ -20,6 +24,16 @@ class CategoryFilterChip extends StatelessWidget {
       onSelected: (_) {
         onSelected();
       },
+      selectedColor: green,
+      backgroundColor: Colors.white,
+      checkmarkColor: Colors.white,
+      labelStyle: TextStyle(
+        color: selected ? Colors.white : gray,
+        fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+      ),
+      side: BorderSide(
+        color: selected ? green : lightGray,
+      ),
     );
   }
 }

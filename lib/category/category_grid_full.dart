@@ -10,39 +10,18 @@ class CategoryGridFull extends StatelessWidget {
     required this.onCategorySelected,
   });
 
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+
   static const List<Map<String, Object>> categories = [
-    {
-      'label': 'Elektronik',
-      'icon': Icons.tv,
-    },
-    {
-      'label': 'Fashion',
-      'icon': Icons.checkroom,
-    },
-    {
-      'label': 'Makanan',
-      'icon': Icons.fastfood,
-    },
-    {
-      'label': 'Kecantikan',
-      'icon': Icons.face,
-    },
-    {
-      'label': 'Olahraga',
-      'icon': Icons.sports_soccer,
-    },
-    {
-      'label': 'Rumah Tangga',
-      'icon': Icons.home,
-    },
-    {
-      'label': 'Buku',
-      'icon': Icons.book,
-    },
-    {
-      'label': 'Mainan',
-      'icon': Icons.toys,
-    },
+    {'label': 'Elektronik', 'icon': Icons.tv},
+    {'label': 'Fashion', 'icon': Icons.checkroom},
+    {'label': 'Makanan', 'icon': Icons.fastfood},
+    {'label': 'Kecantikan', 'icon': Icons.face},
+    {'label': 'Olahraga', 'icon': Icons.sports_soccer},
+    {'label': 'Rumah Tangga', 'icon': Icons.home},
+    {'label': 'Buku', 'icon': Icons.book},
+    {'label': 'Mainan', 'icon': Icons.toys},
   ];
 
   @override
@@ -69,7 +48,10 @@ class CategoryGridFull extends StatelessWidget {
         final String label = category['label'] as String;
         final IconData icon = category['icon'] as IconData;
 
+        final bool isSelected = selectedCategory == label;
+
         return Card(
+          elevation: 2,
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
             onTap: () {
@@ -81,12 +63,16 @@ class CategoryGridFull extends StatelessWidget {
                 Icon(
                   icon,
                   size: 35,
-                  color: Colors.green,
+                  color: primaryRed,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   label,
                   textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isSelected ? primaryRed : darkRed,
+                  ),
                 ),
               ],
             ),

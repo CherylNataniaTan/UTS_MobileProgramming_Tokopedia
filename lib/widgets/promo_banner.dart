@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class PromoBanner extends StatelessWidget {
   const PromoBanner({super.key});
 
+  static const Color primaryRed = Color(0xFFA01626);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 140,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.green[400],
+        color: primaryRed,
         borderRadius: BorderRadius.circular(12),
       ),
       alignment: Alignment.center,

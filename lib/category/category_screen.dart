@@ -27,6 +27,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   String selectedCategory = 'Semua';
 
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+  static const Color gray = Color(0xFF575757);
+
   @override
   Widget build(BuildContext context) {
     final filteredProducts = selectedCategory == 'Semua'
@@ -38,6 +42,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kategori'),
+        backgroundColor: primaryRed,
+        foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -49,6 +55,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                color: darkRed,
               ),
             ),
 
@@ -77,6 +84,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                color: darkRed,
               ),
             ),
 
@@ -100,6 +108,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                color: darkRed,
               ),
             ),
 
@@ -111,6 +120,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   padding: EdgeInsets.all(20),
                   child: Text(
                     'Belum ada produk di kategori ini',
+                    style: TextStyle(
+                      color: gray,
+                    ),
                   ),
                 ),
               )
