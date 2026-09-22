@@ -43,21 +43,28 @@ class MyHomePage extends StatelessWidget {
 
         title: Row(
           children: [
-            SizedBox(
-              width: 52,
-              height: 52,
-              child: ClipRect(
+            // LOGO ASLI + KOTAK PUTIH KECIL
+            Container(
+              width: 40,
+              height: 40,
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
                 child: Transform.scale(
-                  scale: 3.5,
+                  scale: 2.0,
                   child: Image.asset(
-                    'assets/logo.jpeg',
+                    'assets/logo.png',
                     fit: BoxFit.contain,
                   ),
                 ),
               ),
             ),
 
-            const SizedBox(width: 8),
+            const SizedBox(width: 10),
 
             const Text(
               'UntarianMart',
