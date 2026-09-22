@@ -38,8 +38,23 @@ class MyHomePage extends StatelessWidget {
       backgroundColor: const Color(0xFFF6F6F6),
 
       appBar: AppBar(
-        // Warna utama sesuai logo UntarianMart
         backgroundColor: const Color(0xFFA4101E),
+
+        // Logo UntarianMart
+        leading: Padding(
+          padding: const EdgeInsets.all(6),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.all(3),
+            child: Image.asset(
+              'assets/logo.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
 
         title: const Text(
           'UntarianMart',
