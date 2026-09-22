@@ -7,6 +7,7 @@ final List<Product> dummyProducts = [
     imageUrl: 'https://picsum.photos/seed/sneakers/300/300',
     price: 250000,
     rating: 4.8,
+    category: 'Fashion',
   ),
   const Product(
     id: 'p2',
@@ -14,6 +15,7 @@ final List<Product> dummyProducts = [
     imageUrl: 'https://picsum.photos/seed/bag/300/300',
     price: 180000,
     rating: 4.6,
+    category: 'Fashion',
   ),
   const Product(
     id: 'p3',
@@ -21,6 +23,7 @@ final List<Product> dummyProducts = [
     imageUrl: 'https://picsum.photos/seed/watch/300/300',
     price: 320000,
     rating: 4.9,
+    category: 'Elektronik',
   ),
   const Product(
     id: 'p4',
@@ -28,5 +31,6 @@ final List<Product> dummyProducts = [
     imageUrl: 'https://picsum.photos/seed/shirt/300/300',
     price: 75000,
     rating: 4.5,
+    category: 'Fashion',
   ),
 ];

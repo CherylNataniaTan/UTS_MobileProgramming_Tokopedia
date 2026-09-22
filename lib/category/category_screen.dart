@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'category_grid_full.dart';
+
+import '../data/dummy_products.dart';
 import '../search/category_filter_chip.dart';
+import '../search/search_result_tile.dart';
+import 'category_grid_full.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -26,6 +29,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final filteredProducts = selectedCategory == 'Semua'
+        ? dummyProducts
+        : dummyProducts.where((product) {
+            return product.category == selectedCategory;
+          }).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kategori'),
@@ -42,6 +51,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             const SizedBox(height: 12),
 
             Wrap(
@@ -72,7 +82,46 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
             const SizedBox(height: 12),
 
-            const CategoryGridFull(),
+            CategoryGridFull(
+              selectedCategory: selectedCategory,
+              onCategorySelected: (category) {
+                setState(() {
+                  selectedCategory = category;
+                });
+              },
+            ),
+
+            const SizedBox(height: 24),
+
+            Text(
+              selectedCategory == 'Semua'
+                  ? 'Semua Produk'
+                  : 'Produk $selectedCategory',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            if (filteredProducts.isEmpty)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    'Belum ada produk di kategori ini',
+                  ),
+                ),
+              )
+            else
+              Column(
+                children: filteredProducts.map((product) {
+                  return SearchResultTile(
+                    product: product,
+                  );
+                }).toList(),
+              ),
           ],
         ),
       ),

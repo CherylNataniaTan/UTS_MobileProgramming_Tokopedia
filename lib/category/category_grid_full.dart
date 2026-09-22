@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CategoryGridFull extends StatelessWidget {
-  const CategoryGridFull({super.key});
+  final String selectedCategory;
+  final Function(String) onCategorySelected;
 
-  final List<Map<String, dynamic>> categories = const [
+  const CategoryGridFull({
+    super.key,
+    required this.selectedCategory,
+    required this.onCategorySelected,
+  });
+
+  static const List<Map<String, Object>> categories = [
     {
       'label': 'Elektronik',
       'icon': Icons.tv,
@@ -40,10 +47,16 @@ class CategoryGridFull extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayedCategories = selectedCategory == 'Semua'
+        ? categories
+        : categories.where((category) {
+            return category['label'] == selectedCategory;
+          }).toList();
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: categories.length,
+      itemCount: displayedCategories.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 12,
@@ -51,23 +64,32 @@ class CategoryGridFull extends StatelessWidget {
         childAspectRatio: 1.5,
       ),
       itemBuilder: (context, index) {
-        final category = categories[index];
+        final category = displayedCategories[index];
+
+        final String label = category['label'] as String;
+        final IconData icon = category['icon'] as IconData;
 
         return Card(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                category['icon'],
-                size: 35,
-                color: Colors.green,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                category['label'],
-                textAlign: TextAlign.center,
-              ),
-            ],
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () {
+              onCategorySelected(label);
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 35,
+                  color: Colors.green,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         );
       },
