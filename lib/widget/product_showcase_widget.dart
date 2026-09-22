@@ -53,7 +53,7 @@ class ProductShowcaseWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         18,
-        25,
+        0,
         18,
         30,
       ),
@@ -61,7 +61,7 @@ class ProductShowcaseWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Produk Pilihan',
+            'Produk Rekomendasi',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -81,7 +81,9 @@ class ProductShowcaseWidget extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 14,
               mainAxisSpacing: 16,
-              childAspectRatio: 0.68,
+
+              // Ukuran card dibuat lebih proporsional
+              childAspectRatio: 0.72,
             ),
 
             itemBuilder: (context, index) {
@@ -101,26 +103,23 @@ class ProductShowcaseWidget extends StatelessWidget {
                 ),
 
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // FOTO PRODUK
                     ClipRRect(
-                      borderRadius:
-                          const BorderRadius.vertical(
+                      borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(14),
                       ),
-
                       child: Image.network(
                         product['image'],
                         width: double.infinity,
-                        height: 145,
+                        height: 120,
                         fit: BoxFit.cover,
 
                         errorBuilder:
                             (context, error, stackTrace) {
                           return Container(
-                            height: 145,
+                            height: 120,
                             color: const Color(0xFFF9E6E8),
                             child: const Center(
                               child: Icon(
@@ -134,30 +133,37 @@ class ProductShowcaseWidget extends StatelessWidget {
                       ),
                     ),
 
+                    // INFORMASI PRODUK
                     Padding(
-                      padding: const EdgeInsets.all(10),
-
+                      padding: const EdgeInsets.fromLTRB(
+                        10,
+                        8,
+                        10,
+                        8,
+                      ),
                       child: Column(
                         crossAxisAlignment:
                             CrossAxisAlignment.start,
                         children: [
-                          // NAMA PRODUK
+                          // NAMA
                           Text(
                             product['name'],
-                            maxLines: 2,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
+                              color: Colors.black87,
                             ),
                           ),
 
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 5),
 
                           // HARGA
                           Text(
                             product['price'],
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               color: Color(0xFFA4101E),
                               fontSize: 16,
@@ -165,7 +171,7 @@ class ProductShowcaseWidget extends StatelessWidget {
                             ),
                           ),
 
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 4),
 
                           // RATING
                           Row(
@@ -173,7 +179,7 @@ class ProductShowcaseWidget extends StatelessWidget {
                               const Icon(
                                 Icons.star,
                                 color: Colors.amber,
-                                size: 17,
+                                size: 16,
                               ),
 
                               const SizedBox(width: 3),
@@ -189,7 +195,7 @@ class ProductShowcaseWidget extends StatelessWidget {
                               const SizedBox(width: 4),
 
                               const Text(
-                                '(Terjual)',
+                                '• Terjual',
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: Colors.grey,
