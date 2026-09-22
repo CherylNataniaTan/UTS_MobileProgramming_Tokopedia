@@ -5,16 +5,12 @@ class CategoryWidget extends StatelessWidget {
 
   static const List<Map<String, dynamic>> categories = [
     {
-      'icon': Icons.checkroom,
-      'name': 'Fashion',
-    },
-    {
       'icon': Icons.phone_android,
       'name': 'Elektronik',
     },
     {
       'icon': Icons.face,
-      'name': 'Beauty',
+      'name': 'Kecantikan',
     },
     {
       'icon': Icons.fastfood,
@@ -46,10 +42,15 @@ class CategoryWidget extends StatelessWidget {
     },
   ];
 
-  void categoryClicked(BuildContext context, String categoryName) {
+  void categoryClicked(
+    BuildContext context,
+    String categoryName,
+  ) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Kamu memilih kategori $categoryName'),
+        content: Text(
+          'Kamu memilih kategori $categoryName',
+        ),
         duration: const Duration(seconds: 1),
       ),
     );
@@ -58,73 +59,83 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 18,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Kategori',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
+              color: Color(0xFF222222),
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 20),
 
-          SizedBox(
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: categories.length,
 
-                return InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () {
-                    categoryClicked(
-                      context,
-                      category['name'],
-                    );
-                  },
-                  child: Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(right: 12),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 58,
-                          height: 58,
-                          decoration: BoxDecoration(
-                            // Merah muda sebagai background icon
-                            color: const Color(0xFFF9E6E8),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Icon(
-                            category['icon'],
-                            // Merah sesuai logo
-                            color: const Color(0xFFA4101E),
-                            size: 28,
-                          ),
-                        ),
-
-                        const SizedBox(height: 7),
-
-                        Text(
-                          category['name'],
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+            gridDelegate:
+                const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 20,
+              childAspectRatio: 0.72,
             ),
+
+            itemBuilder: (context, index) {
+              final category = categories[index];
+
+              return InkWell(
+                borderRadius: BorderRadius.circular(14),
+                onTap: () {
+                  categoryClicked(
+                    context,
+                    category['name'],
+                  );
+                },
+
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 58,
+                      height: 58,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF9E6E8),
+                        borderRadius:
+                            BorderRadius.circular(14),
+                      ),
+
+                      child: Icon(
+                        category['icon'],
+                        color: const Color(0xFFA4101E),
+                        size: 30,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Text(
+                      category['name'],
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF222222),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ],
       ),

@@ -16,7 +16,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'UntarianMart',
 
-      // Tema menggunakan warna merah dari logo
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFFA4101E),
@@ -35,24 +34,17 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
+      backgroundColor: const Color(0xFFF7F7F7),
 
       appBar: AppBar(
         backgroundColor: const Color(0xFFA4101E),
+        elevation: 0,
 
-        // Logo UntarianMart
         leading: Padding(
-          padding: const EdgeInsets.all(6),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.all(3),
-            child: Image.asset(
-              'assets/logo.png',
-              fit: BoxFit.contain,
-            ),
+          padding: const EdgeInsets.all(8),
+          child: Image.asset(
+            'assets/logo.png',
+            fit: BoxFit.contain,
           ),
         ),
 
@@ -60,17 +52,30 @@ class MyHomePage extends StatelessWidget {
           'UntarianMart',
           style: TextStyle(
             color: Colors.white,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
         ),
+
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.shopping_cart_outlined,
+              color: Colors.white,
+              size: 28,
+            ),
+          ),
+        ],
       ),
 
       body: const SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
           children: [
             SearchWidget(),
-            SizedBox(height: 10),
+
             CategoryWidget(),
           ],
         ),

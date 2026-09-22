@@ -8,7 +8,8 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  final TextEditingController searchController = TextEditingController();
+  final TextEditingController searchController =
+      TextEditingController();
 
   void searchProduct() {
     String keyword = searchController.text.trim();
@@ -16,7 +17,9 @@ class _SearchWidgetState extends State<SearchWidget> {
     if (keyword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Masukkan produk yang ingin dicari'),
+          content: Text(
+            'Masukkan produk yang ingin dicari',
+          ),
           duration: Duration(seconds: 1),
         ),
       );
@@ -40,39 +43,46 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
+      margin: const EdgeInsets.fromLTRB(
+        18,
+        18,
+        18,
+        20,
       ),
-      height: 48,
+      height: 62,
+
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
+
       child: TextField(
         controller: searchController,
         textInputAction: TextInputAction.search,
+
         onSubmitted: (_) {
           searchProduct();
         },
+
         decoration: InputDecoration(
           hintText: 'Cari di UntarianMart...',
+
           hintStyle: const TextStyle(
             color: Colors.grey,
-            fontSize: 14,
+            fontSize: 16,
           ),
 
-          // Warna merah logo
           prefixIcon: const Icon(
             Icons.search,
             color: Color(0xFFA4101E),
+            size: 30,
           ),
 
           suffixIcon: IconButton(
@@ -80,12 +90,15 @@ class _SearchWidgetState extends State<SearchWidget> {
             icon: const Icon(
               Icons.search,
               color: Color(0xFFA4101E),
+              size: 30,
             ),
           ),
 
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 14,
+
+          contentPadding:
+              const EdgeInsets.symmetric(
+            vertical: 19,
           ),
         ),
       ),
