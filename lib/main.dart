@@ -39,44 +39,71 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFFA4101E),
         elevation: 0,
+        automaticallyImplyLeading: false,
 
-        // LOGO ASLI UNTARIANMART
-        leading: Padding(
-          padding: const EdgeInsets.all(7),
-          child: Image.asset(
-            'assets/logo.png',
-            fit: BoxFit.contain,
-          ),
-        ),
+        title: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 500,
+            ),
 
-        title: const Text(
-          'UntarianMart',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+            child: Row(
+              children: [
+                // LOGO ASLI
+                SizedBox(
+                  width: 42,
+                  height: 42,
+                  child: SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: ClipRect(
+                      child: Image.asset(
+                        'assets/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
 
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.shopping_cart_outlined,
-              color: Colors.white,
-              size: 28,
+                const SizedBox(width: 10),
+
+                const Text(
+                  'UntarianMart',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const Spacer(),
+
+                const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Colors.white,
+                  size: 28,
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
 
-      body: const SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SearchWidget(),
-            CategoryWidget(),
-          ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            maxWidth: 500,
+          ),
+
+          child: const SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SearchWidget(),
+                CategoryWidget(),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -49,11 +49,13 @@ class _SearchWidgetState extends State<SearchWidget> {
         18,
         20,
       ),
+
       height: 62,
 
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
+
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -65,6 +67,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 
       child: TextField(
         controller: searchController,
+
         textInputAction: TextInputAction.search,
 
         onSubmitted: (_) {
@@ -79,7 +82,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             fontSize: 16,
           ),
 
-          // CUMA SATU ICON SEARCH DI KIRI
+          // SATU SEARCH ICON SAJA
           prefixIcon: Icon(
             Icons.search,
             color: Color(0xFFA4101E),

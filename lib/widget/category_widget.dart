@@ -36,6 +36,10 @@ class CategoryWidget extends StatelessWidget {
       'icon': Icons.directions_run,
       'name': 'Sepatu',
     },
+    {
+      'icon': Icons.more_horiz,
+      'name': 'Lainnya',
+    },
   ];
 
   void categoryClicked(
@@ -54,10 +58,11 @@ class CategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(
+    return Padding(
+      padding: const EdgeInsets.symmetric(
         horizontal: 18,
       ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -70,7 +75,7 @@ class CategoryWidget extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
 
           GridView.builder(
             shrinkWrap: true,
@@ -80,9 +85,15 @@ class CategoryWidget extends StatelessWidget {
             gridDelegate:
                 const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
-              crossAxisSpacing: 10,
+
+              // Jarak antar kolom
+              crossAxisSpacing: 8,
+
+              // Jarak antar baris
               mainAxisSpacing: 20,
-              childAspectRatio: 0.72,
+
+              // Membuat kotak kategori proporsional
+              childAspectRatio: 0.78,
             ),
 
             itemBuilder: (context, index) {
@@ -90,6 +101,7 @@ class CategoryWidget extends StatelessWidget {
 
               return InkWell(
                 borderRadius: BorderRadius.circular(14),
+
                 onTap: () {
                   categoryClicked(
                     context,
@@ -98,11 +110,11 @@ class CategoryWidget extends StatelessWidget {
                 },
 
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       width: 58,
                       height: 58,
+
                       decoration: BoxDecoration(
                         color: const Color(0xFFF9E6E8),
                         borderRadius:
@@ -116,13 +128,14 @@ class CategoryWidget extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 7),
 
                     Text(
                       category['name'],
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+
                       style: const TextStyle(
                         fontSize: 12,
                         color: Color(0xFF222222),
