@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'models/dummy_products.dart';
 import 'widgets/search_bar_widget.dart';
 import 'widgets/promo_banner.dart';
 import 'widgets/category_list.dart';
 import 'widgets/product_grid.dart';
-import 'data/dummy_products.dart';
-
+import 'widgets/product_cart_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,14 +16,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Marketplace'),
           backgroundColor: Colors.green,
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -33,17 +33,38 @@ class MyApp extends StatelessWidget {
               const SizedBox(height: 16),
               const Text(
                 'Kategori',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize:16),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(height: 8),
               const CategoryList(),
               const SizedBox(height: 16),
               const Text(
                 'Rekomendasi Untukmu',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(height: 8),
-              ProductGrid(products: dummyProducts),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: dummyProducts.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 0.68,
+                ),
+                itemBuilder: (context, index) {
+                  return ProductCardWidget(
+                    product: dummyProducts[index],
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -51,4 +72,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
