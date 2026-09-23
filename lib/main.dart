@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'models/dummy_products.dart';
+
+import 'search/search_screen.dart';
+import 'category/category_screen.dart';
+
 import 'widgets/search_bar_widget.dart';
 import 'widgets/promo_banner.dart';
 import 'widgets/category_list.dart';
 import 'widgets/product_grid.dart';
-import 'widgets/product_cart_widget.dart';
+
+import 'data/dummy_products.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,61 +17,98 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Marketplace'),
-          backgroundColor: Colors.green,
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SearchBarWidget(),
-              const SizedBox(height: 16),
-              const PromoBanner(),
-              const SizedBox(height: 16),
-              const Text(
-                'Kategori',
+      home: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'UntarianMart',
                 style: TextStyle(
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 8),
-              const CategoryList(),
-              const SizedBox(height: 16),
-              const Text(
-                'Rekomendasi Untukmu',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+              backgroundColor: primaryRed,
+              foregroundColor: Colors.white,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SearchScreen(),
+                      ),
+                    );
+                  },
                 ),
-              ),
-              const SizedBox(height: 8),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: dummyProducts.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 0.68,
+                IconButton(
+                  icon: const Icon(Icons.category),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CategoryScreen(),
+                      ),
+                    );
+                  },
                 ),
-                itemBuilder: (context, index) {
-                  return ProductCardWidget(
-                    product: dummyProducts[index],
-                  );
-                },
+              ],
+            ),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SearchBarWidget(),
+
+                  const SizedBox(height: 16),
+
+                  const PromoBanner(),
+
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    'Kategori',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: darkRed,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  const CategoryList(),
+
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    'Rekomendasi Untukmu',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: darkRed,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  ProductGrid(
+                    products: dummyProducts,
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
