@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
-
+import 'package:tokopedia/models/product.dart';
 import '../widgets/shipping_address_widget.dart';
 import '../widgets/payment_method_widget.dart';
 import '../widgets/order_summary_widget.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  final String productName;
-  final int productPrice;
-  final int quantity;
+  final List<Product> products;
 
   const CheckoutScreen({
     super.key,
-    required this.productName,
-    required this.productPrice,
-    required this.quantity,
+    required this.products,
   });
 
   @override
@@ -21,13 +17,17 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  String selectedMethod = 'Transfer Bank';
+  String selectedPayment = 'Transfer Bank';
 
   @override
   Widget build(BuildContext context) {
-    int subtotal = widget.productPrice * widget.quantity;
+    int subtotal = 0;
+    for (var product in widget.products) {
+      subtotal += product.price;
+    }
+
     int shipping = 10000;
-    int discount = 5000;
+    int discount = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -58,96 +58,36 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 const SizedBox(height: 10),
 
-                Row(
-                  children: [
-                    Container(
-                      width: 70,
-                      height: 70,
-                      color: Colors.grey[200],
-                      child: const Icon(
-                        Icons.shopping_bag,
-                        size: 35,
-                      ),
-                    ),
-
-                    const SizedBox(width: 10),
-
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.productName),
-                          const SizedBox(height: 5),
-                          Text(
-                            'Rp${widget.productPrice}',
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
+                ...widget.products.map( 
+                  (product) => Padding( 
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(product.name),
+                        ),
+                        Text(
+                          'Rp${product.price}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            'Jumlah: ${widget.quantity}',
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          Container(
-            padding: const EdgeInsets.all(15),
-            color: Colors.white,
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Pengiriman',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text('Reguler'),
-                SizedBox(height: 5),
-                Text(
-                  'Rp10000',
-                  style: TextStyle(
-                    color: Colors.grey,
                   ),
                 ),
               ],
             ),
           ),
-
+          
           const SizedBox(height: 12),
-
-          PaymentMethodWidget(
-            selectedMethod: selectedMethod,
-            onChanged: (value) {
-              setState(() {
-                selectedMethod = value;
-              });
-            },
-          ),
-
-          const SizedBox(height: 12),
-
+          
           OrderSummaryWidget(
             subtotal: subtotal,
-            shipping: shipping,
+            shipping: shipping, 
             discount: discount,
           ),
-
+            
           const SizedBox(height: 12),
 
           ElevatedButton(
@@ -156,17 +96,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SnackBar(
                   content: Text('Pesanan berhasil dibuat'),
                 ),
-              );
+              ); // Handle checkout logic here
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               padding: const EdgeInsets.symmetric(vertical: 15),
             ),
             child: const Text(
-              'Buat Pesanan',
+              'Bayar Sekarang',
               style: TextStyle(
-                color: Colors.white,
                 fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
