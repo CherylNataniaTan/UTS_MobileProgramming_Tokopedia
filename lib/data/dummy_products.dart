@@ -1,4 +1,4 @@
-import 'package:tokopedia/models/product.dart';
+import '../models/product.dart';
 
 final List<Product> dummyProducts = [
   const Product(
