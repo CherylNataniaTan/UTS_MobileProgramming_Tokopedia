@@ -11,6 +11,10 @@ class CategoryList extends StatelessWidget {
     {'label': 'Olahraga', 'icon': Icons.sports_soccer},
   ];
 
+  static const Color primaryRed = Color.fromARGB(255, 255, 232, 235);
+  static const Color darkRed = Color(0xFF700D1B);
+  static const Color lightGray = Color.fromARGB(255, 46, 82, 53);
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -20,22 +24,26 @@ class CategoryList extends StatelessWidget {
         itemCount: categories.length,
         itemBuilder: (context, index) {
           final category = categories[index];
+
           return Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Column(
               children: [
                 CircleAvatar(
                   radius: 26,
-                  backgroundColor: Colors.green[100],
+                  backgroundColor: lightGray,
                   child: Icon(
                     category['icon'],
-                    color: Colors.green[800],
+                    color: primaryRed,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   category['label'],
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: darkRed,
+                  ),
                 ),
               ],
             ),
