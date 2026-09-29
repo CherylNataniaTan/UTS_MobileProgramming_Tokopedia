@@ -7,6 +7,8 @@ import 'widgets/product_grid.dart';
 import 'data/dummy_products.dart';
 import 'screens/cart_screen.dart';
 
+import 'screens/home_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
