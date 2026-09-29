@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:tokopedia/models/product.dart';
-
 import '../widgets/shipping_address_widget.dart';
 import '../widgets/payment_method_widget.dart';
 import '../widgets/order_summary_widget.dart';
@@ -22,6 +20,9 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+
   String selectedPayment = 'COD';
 
   final int shipping = Random().nextInt(20001) + 5000;
@@ -40,8 +41,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout'),
-        backgroundColor: Colors.green,
+        title: const Text(
+          'Checkout',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: primaryRed,
+        foregroundColor: Colors.white,
       ),
 
       backgroundColor: Colors.grey[200],
@@ -64,6 +72,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: darkRed,
                   ),
                 ),
 
@@ -91,6 +100,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             'Rp$totalProduct',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
+                              color: primaryRed,
                             ),
                           ),
                         ],
@@ -135,7 +145,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             },
 
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
+              backgroundColor: primaryRed,
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 15),
             ),
 

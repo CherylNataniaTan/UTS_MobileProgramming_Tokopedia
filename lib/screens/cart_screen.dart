@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tokopedia/models/product.dart';
-
 import '../widgets/cart_item_widget.dart';
 import 'checkout_screen.dart';
 
@@ -17,6 +16,9 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  static const Color primaryRed = Color(0xFFA01626);
+  static const Color darkRed = Color(0xFF700D1B);
+
   late List<Product> cartProducts;
 
   List<Product> selectedProducts = [];
@@ -90,11 +92,18 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Keranjang'),
-        backgroundColor: Colors.green,
+        title: const Text(
+          'Keranjang',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: primaryRed,
+        foregroundColor: Colors.white,
       ),
 
-      backgroundColor: Colors.green[200],
+      backgroundColor: const Color(0xFFF5DDE0),
 
       body: cartProducts.isEmpty
           ? const Center(
@@ -103,6 +112,7 @@ class _CartScreenState extends State<CartScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: darkRed,
                 ),
               ),
             )
@@ -120,6 +130,7 @@ class _CartScreenState extends State<CartScreen> {
                     children: [
                       Checkbox(
                         value: selectedProducts.contains(product),
+                        activeColor: primaryRed,
                         onChanged: (value) {
                           setState(() {
                             if (value == true) {
@@ -162,7 +173,8 @@ class _CartScreenState extends State<CartScreen> {
               ? null
               : goToCheckout,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
+            backgroundColor: primaryRed,
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 15),
           ),
           child: const Text(
