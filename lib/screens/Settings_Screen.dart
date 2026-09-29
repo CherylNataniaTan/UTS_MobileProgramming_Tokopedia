@@ -11,7 +11,12 @@ class SettingsScreen extends StatelessWidget {
           'Pengaturan',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Color.from(
+          alpha: 1,
+          red: 0.439,
+          green: 0.051,
+          blue: 0.106,
+        ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: ListView(
@@ -46,8 +51,7 @@ class SettingsScreen extends StatelessWidget {
               'Keluar',
               style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
             ),
-            onTap: () {
-            },
+            onTap: () {},
           ),
         ],
       ),

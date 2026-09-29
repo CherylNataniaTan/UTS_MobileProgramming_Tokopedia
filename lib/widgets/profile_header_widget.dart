@@ -3,40 +3,37 @@ import 'package:flutter/material.dart';
 class ProfileHeaderWidget extends StatelessWidget {
   final String name;
   final String username;
-  final String imageUrl;
+  final String? imageUrl;
   final VoidCallback onEditProfile;
 
   const ProfileHeaderWidget({
     super.key,
     required this.name,
     required this.username,
-    required this.imageUrl,
+    this.imageUrl,
     required this.onEditProfile,
   });
 
   @override
   Widget build(BuildContext context) {
+    final hasImage = imageUrl != null && imageUrl!.isNotEmpty;
+
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
             CircleAvatar(
-              radius: 36,
-              backgroundColor: Colors.green[100],
-              backgroundImage:
-                  imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
-              child: imageUrl.isEmpty
+              radius: 30,
+              backgroundColor: Colors.grey[300],
+              backgroundImage: hasImage ? NetworkImage(imageUrl!) : null,
+              child: !hasImage
                   ? Text(
                       name.isNotEmpty ? name[0].toUpperCase() : 'U',
                       style: const TextStyle(
-                        fontSize: 28,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),,
                       ),
                     )
                   : null,
@@ -52,26 +49,17 @@ class ProfileHeaderWidget extends StatelessWidget {
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    username,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  Text(username, style: const TextStyle(color: Colors.grey)),
                 ],
               ),
             ),
             IconButton(
+              icon: const Icon(
+                Icons.edit,
+                color: Color.fromARGB(255, 112, 13, 27),
+              ),
               onPressed: onEditProfile,
-              icon: const Icon(Icons.edit_outlined, color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),),
-              tooltip: 'Edit Profil',
             ),
           ],
         ),
