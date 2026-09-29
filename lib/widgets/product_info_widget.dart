@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 class ProductInfoWidget extends StatelessWidget {
   final String name;
   final int price;
-  final int sold;
 
   const ProductInfoWidget({
     super.key,
     required this.name,
     required this.price,
-    required this.sold,
   });
 
   // Fungsi buat format harga jadi "Rp1.000.000"
   String _formatPrice(int price) {
-    String priceStr = price.toInt().toString();
+    String priceStr = price.toString();
     String result = '';
     int count = 0;
 
@@ -31,32 +29,23 @@ class ProductInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            name,
+            _formatPrice(price),
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 6),
           Text(
-            _formatPrice(price),
+            name,
             style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Terjual $sold+',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
+              fontSize: 15,
+              height: 1.3,
             ),
           ),
         ],
