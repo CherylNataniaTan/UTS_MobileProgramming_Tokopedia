@@ -20,10 +20,10 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Data Dummy User
+    //Data Dummy User
     final user = UserModel(name: 'Dimas', username: '@dimas', profileImage: '');
 
-    // Data Dummy Orders
+    //Data Dummy Orders
     final orders = [
       OrderModel(
         id: 'ORD001',
@@ -67,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
           'Profil Saya',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),
         elevation: 0,
       ),
       body: SingleChildScrollView(

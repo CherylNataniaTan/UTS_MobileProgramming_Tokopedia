@@ -10,7 +10,7 @@ class OrdersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Pesanan Status: $initialStatusFilter'),
-        backgroundColor: Colors.green,
+        backgroundColor: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),
       ),
       body: Center(
         child: Text(

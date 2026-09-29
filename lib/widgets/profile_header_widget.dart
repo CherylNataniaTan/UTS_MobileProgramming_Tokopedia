@@ -36,7 +36,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),,
                       ),
                     )
                   : null,
@@ -70,7 +70,7 @@ class ProfileHeaderWidget extends StatelessWidget {
             ),
             IconButton(
               onPressed: onEditProfile,
-              icon: const Icon(Icons.edit_outlined, color: Colors.green),
+              icon: const Icon(Icons.edit_outlined, color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),),
               tooltip: 'Edit Profil',
             ),
           ],

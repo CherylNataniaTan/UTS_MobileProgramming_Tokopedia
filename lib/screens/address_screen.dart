@@ -6,8 +6,13 @@ class AddressScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Alamat Pengiriman'), backgroundColor: Colors.green),
-      body: const Center(child: Text('Akan segera hadir fitur pengelolaan alamat pengiriman.')),
+      appBar: AppBar(
+        title: const Text('Alamat Pengiriman'),
+        backgroundColor:Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),
+      ),
+      body: const Center(
+        child: Text('Akan segera hadir fitur pengelolaan alamat pengiriman.'),
+      ),
     );
   }
 }

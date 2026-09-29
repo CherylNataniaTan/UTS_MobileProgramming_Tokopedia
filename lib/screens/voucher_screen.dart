@@ -9,7 +9,7 @@ class VoucherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Voucher Saya'), backgroundColor: Colors.green),
+        appBar: AppBar(title: const Text('Voucher Saya'), backgroundColor: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),),
       body: vouchers.isEmpty
           ? const Center(child: Text('Belum Ada Voucher'))
           : ListView.builder(
@@ -19,7 +19,7 @@ class VoucherScreen extends StatelessWidget {
                 final v = vouchers[index];
                 return Card(
                   child: ListTile(
-                    leading: const Icon(Icons.confirmation_number, color: Colors.green),
+                    leading: const Icon(Icons.confirmation_number, color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),),
                     title: Text('${v.code} (${v.discount})'),
                     subtitle: Text(v.description),
                   ),

@@ -35,7 +35,7 @@ class VoucherWidget extends StatelessWidget {
           children: [
             Icon(
               Icons.confirmation_number_outlined,
-              color: hasVouchers ? Colors.green[800] : Colors.grey,
+              color: hasVouchers ? Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106) : Colors.grey,
               size: 28,
             ),
             const SizedBox(width: 12),
@@ -57,7 +57,7 @@ class VoucherWidget extends StatelessWidget {
                         : 'Belum ada voucher tersedia',
                     style: TextStyle(
                       fontSize: 12,
-                      color: hasVouchers ? Colors.green[800] : Colors.grey[600],
+                      color: hasVouchers ? Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106) : Colors.grey[600],
                     ),
                   ),
                 ],
@@ -70,12 +70,12 @@ class VoucherWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: Colors.green[800],
+                    color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),
                   ),
                 ),
                 Icon(
                   Icons.chevron_right,
-                  color: Colors.green[800],
+                  color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),
                   size: 18,
                 ),
               ],

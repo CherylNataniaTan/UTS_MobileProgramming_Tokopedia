@@ -88,7 +88,7 @@ class OrderStatusWidget extends StatelessWidget {
             Stack(
               clipBehavior: Clip.none,
               children: [
-                Icon(icon, size: 28, color: Colors.green[800]),
+                Icon(icon, size: 28, color:Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),),
                 if (count > 0)
                   Positioned(
                     right: -6,
