@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ProductInfoWidget extends StatelessWidget {
   final String name;
-  final double price;
+  final int price;
   final int sold;
 
   const ProductInfoWidget({
@@ -13,7 +13,7 @@ class ProductInfoWidget extends StatelessWidget {
   });
 
   // Fungsi buat format harga jadi "Rp1.000.000"
-  String _formatPrice(double price) {
+  String _formatPrice(int price) {
     String priceStr = price.toInt().toString();
     String result = '';
     int count = 0;

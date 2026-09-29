@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/product_model.dart';
+import '../models/product.dart';
 import '../screens/product_detail_screen.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  final ProductModel product;
+  final Product product;
 
   const ProductCardWidget({
     super.key,
@@ -11,7 +11,7 @@ class ProductCardWidget extends StatelessWidget {
   });
 
   // Fungsi format harga jadi "Rp1.000.000" (disamain sama ProductInfoWidget)
-  String _formatPrice(double price) {
+  String _formatPrice(int price) {
     String priceStr = price.toInt().toString();
     String result = '';
     int count = 0;
