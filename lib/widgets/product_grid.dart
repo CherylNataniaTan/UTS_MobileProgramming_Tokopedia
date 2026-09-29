@@ -4,10 +4,12 @@ import '../models/product.dart';
 class ProductGrid extends StatelessWidget {
   final List<Product> products;
 
-  const ProductGrid({super.key, required this.products});
+  const ProductGrid({
+    super.key,
+    required this.products,
+  });
 
   static const Color primaryRed = Color(0xFFA01626);
-  static const Color darkRed = Color(0xFF700D1B);
   static const Color gray = Color.fromARGB(255, 87, 87, 87);
   static const Color lightGray = Color(0xFFDADAD9);
   static const Color orange = Color(0xFFE89D2D);
@@ -34,65 +36,68 @@ class ProductGrid extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(10),
-                  ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AspectRatio(
+                  aspectRatio: 1.15,
                   child: Image.network(
                     product.imageUrl,
                     fit: BoxFit.cover,
                     width: double.infinity,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: gray,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Rp ${product.price.toString().replaceAllMapped(
-                      RegExp(r'\B(?=(\d{3})+(?!\d))'),
-                      (match) => '.',
-                    )}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: primaryRed,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.star,
-                          size: 14,
-                          color: orange,
+
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: gray,
                         ),
-                        Text(
-                          ' ${product.rating}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: gray,
+                      ),
+
+                      const SizedBox(height: 4),
+
+                      Text(
+                        'Rp ${product.price.toString().replaceAllMapped(
+                          RegExp(r'\B(?=(\d{3})+(?!\d))'),
+                          (match) => '.',
+                        )}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: primaryRed,
+                        ),
+                      ),
+
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            size: 14,
+                            color: orange,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          Text(
+                            ' ${product.rating}',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: gray,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

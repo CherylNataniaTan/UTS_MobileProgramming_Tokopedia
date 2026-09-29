@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../search/search_screen.dart';
 
 class SearchBarWidget extends StatelessWidget {
   const SearchBarWidget({super.key});
@@ -9,36 +10,44 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: lightGray,
-        ),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.search,
-            color: primaryRed,
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SearchScreen(),
           ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(
-                hintText: 'Cari barang...',
-                hintStyle: TextStyle(
+        );
+      },
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: lightGray,
+          ),
+        ),
+        child: const Row(
+          children: [
+            Icon(
+              Icons.search,
+              color: primaryRed,
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Cari barang...',
+                style: TextStyle(
                   color: gray,
+                  fontSize: 16,
                 ),
-                border: InputBorder.none,
-                isDense: true,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
