@@ -1,103 +1,82 @@
 import 'package:flutter/material.dart';
 
-class ProductActionWidget extends StatefulWidget {
-  final Function(int quantity) onAddToCart;
-  final Function(int quantity) onBuyNow;
+class ProductActionWidget extends StatelessWidget {
+  final VoidCallback onChat;
+  final VoidCallback onAddToCart;
+  final VoidCallback onBuyNow;
 
   const ProductActionWidget({
     super.key,
+    required this.onChat,
     required this.onAddToCart,
     required this.onBuyNow,
   });
 
-  @override
-  State<ProductActionWidget> createState() => _ProductActionWidgetState();
-}
-
-class _ProductActionWidgetState extends State<ProductActionWidget> {
-  int quantity = 1;
-
-  void _increment() {
-    setState(() {
-      quantity++;
-    });
-  }
-
-  void _decrement() {
-    if (quantity > 1) {
-      setState(() {
-        quantity--;
-      });
-    }
-  }
+  static const Color green = Color(0xFF03AC0E);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border(top: BorderSide(color: Colors.grey[300]!)),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Pilih jumlah barang
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
             children: [
-              const Text(
-                'Jumlah',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: _decrement,
-                    icon: const Icon(Icons.remove_circle_outline),
-                  ),
-                  Text(
-                    '$quantity',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  IconButton(
-                    onPressed: _increment,
-                    icon: const Icon(Icons.add_circle_outline),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // Tombol Tambah ke Keranjang dan Beli Sekarang
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () => widget.onAddToCart(quantity),
-                  icon: const Icon(Icons.add_shopping_cart),
-                  label: const Text('Tambah Keranjang'),
+              // Tombol chat penjual
+              SizedBox(
+                width: 46,
+                height: 44,
+                child: OutlinedButton(
+                  onPressed: onChat,
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.zero,
+                    foregroundColor: Colors.grey[700],
+                    side: BorderSide(color: Colors.grey[400]!),
+                  ),
+                  child: const Icon(Icons.chat_bubble_outline, size: 20),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: SizedBox(
+                  height: 44,
+                  child: OutlinedButton(
+                    onPressed: onAddToCart,
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: green,
+                      side: const BorderSide(color: green),
+                    ),
+                    child: const Text(
+                      '+ Keranjang',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
-                child: ElevatedButton(
-                  onPressed: () => widget.onBuyNow(quantity),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                  child: const Text(
-                    'Beli Sekarang',
-                    style: TextStyle(color: Colors.white),
+                child: SizedBox(
+                  height: 44,
+                  child: ElevatedButton(
+                    onPressed: onBuyNow,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: green,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text(
+                      'Beli Langsung',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

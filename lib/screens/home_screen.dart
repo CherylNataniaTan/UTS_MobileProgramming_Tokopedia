@@ -1,32 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'category/category_screen.dart';
-import 'screens/Profile_Screen.dart';
-import 'screens/cart_screen.dart';
-import 'widgets/search_bar_widget.dart';
-import 'widgets/promo_banner.dart';
-import 'widgets/category_list.dart';
-import 'widgets/product_grid.dart';
-import 'data/dummy_products.dart';
+import '../search/search_screen.dart';
+import '../category/category_screen.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import '../widgets/search_bar_widget.dart';
+import '../widgets/promo_banner.dart';
+import '../widgets/category_list.dart';
+import '../widgets/product_grid.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        overscroll: false,
-      ),
-      home: const HomeScreen(),
-    );
-  }
-}
+import '../data/dummy_products.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -48,22 +30,17 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: primaryRed,
         foregroundColor: Colors.white,
         actions: [
-          // TOMBOL KERANJANG
           IconButton(
-            icon: const Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.search),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CartScreen(
-                    products: dummyProducts,
-                  ),
+                  builder: (context) => const SearchScreen(),
                 ),
               );
             },
           ),
-
-          // TOMBOL KATEGORI
           IconButton(
             icon: const Icon(Icons.category),
             onPressed: () {
@@ -75,23 +52,9 @@ class HomeScreen extends StatelessWidget {
               );
             },
           ),
-
-          // TOMBOL PROFILE
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ProfileScreen(),
-                ),
-              );
-            },
-          ),
         ],
       ),
       body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

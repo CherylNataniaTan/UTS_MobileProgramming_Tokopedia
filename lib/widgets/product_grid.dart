@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../screens/product_detail_screen.dart';
 
 class ProductGrid extends StatelessWidget {
   final List<Product> products;
@@ -29,7 +30,16 @@ class ProductGrid extends StatelessWidget {
       itemBuilder: (context, index) {
         final product = products[index];
 
-        return Container(
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailScreen(product: product),
+              ),
+            );
+          },
+          child: Container(
           decoration: BoxDecoration(
             border: Border.all(
               color: lightGray,
@@ -98,6 +108,7 @@ class ProductGrid extends StatelessWidget {
                 ),
               ],
             ),
+          ),
           ),
         );
       },
