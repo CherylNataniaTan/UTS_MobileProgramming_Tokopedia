@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/product_model.dart';
+import '../models/product.dart';
 import '../widgets/product_image_widget.dart';
 import '../widgets/product_info_widget.dart';
 import '../widgets/rating_widget.dart';
@@ -7,7 +7,7 @@ import '../widgets/seller_info_widget.dart';
 import '../widgets/product_action_widget.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  final ProductModel product;
+  final Product product;
 
   const ProductDetailScreen({
     super.key,
