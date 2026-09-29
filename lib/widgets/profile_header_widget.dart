@@ -36,7 +36,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),,
+                        color: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),
                       ),
                     )
                   : null,
