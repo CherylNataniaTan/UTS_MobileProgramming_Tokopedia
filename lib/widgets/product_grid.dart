@@ -1,22 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:tokopedia/services/product_service.dart';
 import '../models/product.dart';
 import '../screens/product_detail_screen.dart';
+import 'product_cart_widget.dart';
+class ProductGrid extends StatefulWidget {
+  const ProductGrid({super.key, required List<Product> products});
 
-class ProductGrid extends StatelessWidget {
-  final List<Product> products;
+  @override
+  State<ProductGrid> createState() => _ProductGridState();
+}
 
-  const ProductGrid({
-    super.key,
-    required this.products,
-  });
+class _ProductGridState extends State<ProductGrid> {
+  late Future<List<Product>> _future;
 
-  static const Color primaryRed = Color(0xFFA01626);
-  static const Color gray = Color.fromARGB(255, 87, 87, 87);
-  static const Color lightGray = Color(0xFFDADAD9);
-  static const Color orange = Color(0xFFE89D2D);
+  @override
+  void initState() {
+    super.initState();
+    _future = ProductService.fetchProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<List<Product>>(
+      future: _future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError || !snapshot.hasData) {
+          return const Center(child: Text('Gagal memuat produk'));
+        }
+        final products = snapshot.data!;
+        return GridView.builder(
+          padding: const EdgeInsets.all(12),
+          itemCount: products.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 0.65,
+          ),
+          itemBuilder: (context, i) => ProductcartWidget(product: products[i]),
+        );
+      },
+    );
+  }
+}
+
+  const Color primaryRed = Color(0xFFA01626);
+  const Color gray = Color.fromARGB(255, 87, 87, 87);
+  const Color lightGray = Color(0xFFDADAD9);
+  const Color orange = Color(0xFFE89D2D);
+
+  @override
+  Widget build(BuildContext context, dynamic products) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -114,4 +151,3 @@ class ProductGrid extends StatelessWidget {
       },
     );
   }
-}
