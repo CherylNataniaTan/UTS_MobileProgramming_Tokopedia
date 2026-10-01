@@ -24,4 +24,22 @@ class Product {
     required this.sellerLocation,
     required this.description,
   });
+
+     factory Product.fromJson(Map<String, dynamic> json) {
+    final reviews = (json['reviews'] as List?) ?? [];
+    return Product(
+      id: json['id'].toString(),
+      name: json['title'] ?? '',
+      // DummyJSON harganya USD, dikali 16000 biar kayak rupiah
+      price: (((json['price'] ?? 0) as num) * 16000).round(),
+      imageUrl: json['thumbnail'] ?? '',
+      rating: ((json['rating'] ?? 0) as num).toDouble(),
+      category: json['category'] ?? '',
+      reviewCount: reviews.length,
+      sold: ((json['stock'] ?? 0) as num).toInt(),
+      sellerName: json['brand'] ?? 'Toko Official',
+      sellerLocation: 'Jakarta',
+      description: json['description'] ?? '',
+    );
+  }
 }

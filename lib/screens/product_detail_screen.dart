@@ -22,11 +22,7 @@ const List<Map<String, String>> _dummyReviews = [
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
-
-  const ProductDetailScreen({
-    super.key,
-    required this.product,
-  });
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -192,7 +188,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Text(
             widget.product.description,
             maxLines: descExpanded ? null : 2,
-            overflow: descExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+            overflow:
+                descExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
             style: const TextStyle(height: 1.4),
           ),
           const SizedBox(height: 8),
