@@ -5,6 +5,8 @@ import '../widgets/product_info_widget.dart';
 import '../widgets/rating_widget.dart';
 import '../widgets/seller_info_widget.dart';
 import '../widgets/product_action_widget.dart';
+import '../data/cart_data.dart';
+import 'cart_screen.dart';
 
 // Data ulasan dummy
 const List<Map<String, String>> _dummyReviews = [
@@ -306,7 +308,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartScreen(),
+                ),
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.more_vert),
@@ -356,8 +365,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       // 5. Tombol bawah
       bottomNavigationBar: ProductActionWidget(
         onChat: () => _showMessage('Fitur chat belum tersedia'),
-        onAddToCart: () =>
-            _showMessage('$quantity item ditambahkan ke keranjang'),
+        onAddToCart: () {
+          addToCart(product, quantity);
+          _showMessage('$quantity item ditambahkan ke keranjang');
+        }, 
         onBuyNow: () => _showMessage('Lanjut ke pembayaran ($quantity item)'),
       ),
     );

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tokopedia/models/product.dart';
+import '../data/cart_data.dart';
 import '../widgets/cart_item_widget.dart';
 import 'checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
-  final List<Product> products;
-
   const CartScreen({
     super.key,
-    required this.products,
   });
 
   @override
@@ -16,36 +14,25 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  static const Color primaryRed = Color(0xFFA01626);
-  static const Color darkRed = Color(0xFF700D1B);
-
-  late List<Product> cartProducts;
-
   List<Product> selectedProducts = [];
-
-  Map<String, int> quantities = {};
 
   @override
   void initState() {
     super.initState();
-
-    cartProducts = List<Product>.from(widget.products);
-
-    for (var product in cartProducts) {
-      quantities[product.id] = 1;
-    }
   }
 
   void increaseQuantity(Product product) {
     setState(() {
-      quantities[product.id] = quantities[product.id]! + 1;
+      cartQuantities[product.id] =
+          (cartQuantities[product.id] ?? 1) + 1;
     });
   }
 
   void decreaseQuantity(Product product) {
     setState(() {
-      if (quantities[product.id]! > 1) {
-        quantities[product.id] = quantities[product.id]! - 1;
+      if ((cartQuantities[product.id] ?? 1) > 1) {
+        cartQuantities[product.id] =
+            cartQuantities[product.id]! - 1;
       }
     });
   }
@@ -54,7 +41,7 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       cartProducts.remove(product);
       selectedProducts.remove(product);
-      quantities.remove(product.id);
+      cartQuantities.remove(product.id);
     });
   }
 
@@ -67,8 +54,8 @@ class _CartScreenState extends State<CartScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => CheckoutScreen(
-          products: selectedProducts,
-          quantities: quantities,
+          products: List<Product>.from(selectedProducts),
+          quantities: Map<String, int>.from(cartQuantities),
         ),
       ),
     );
@@ -80,7 +67,7 @@ class _CartScreenState extends State<CartScreen> {
         );
 
         for (var product in selectedProducts) {
-          quantities.remove(product.id);
+          cartQuantities.remove(product.id);
         }
 
         selectedProducts.clear();
@@ -90,6 +77,9 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryRed = Color(0xFFA01626);
+    const Color darkRed = Color(0xFF700D1B);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -102,9 +92,7 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: primaryRed,
         foregroundColor: Colors.white,
       ),
-
       backgroundColor: const Color(0xFFF5DDE0),
-
       body: cartProducts.isEmpty
           ? const Center(
               child: Text(
@@ -141,13 +129,12 @@ class _CartScreenState extends State<CartScreen> {
                           });
                         },
                       ),
-
                       Expanded(
                         child: CartItemWidget(
                           productName: product.name,
                           imageUrl: product.imageUrl,
                           price: product.price,
-                          quantity: quantities[product.id]!,
+                          quantity: cartQuantities[product.id] ?? 1,
                           onIncrease: () {
                             increaseQuantity(product);
                           },
@@ -164,14 +151,12 @@ class _CartScreenState extends State<CartScreen> {
                 );
               },
             ),
-
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(12),
         color: Colors.white,
         child: ElevatedButton(
-          onPressed: selectedProducts.isEmpty
-              ? null
-              : goToCheckout,
+          onPressed:
+              selectedProducts.isEmpty ? null : goToCheckout,
           style: ElevatedButton.styleFrom(
             backgroundColor: primaryRed,
             foregroundColor: Colors.white,
