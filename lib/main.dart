@@ -7,7 +7,11 @@ import 'widgets/search_bar_widget.dart';
 import 'widgets/promo_banner.dart';
 import 'widgets/category_list.dart';
 import 'widgets/product_grid.dart';
-import 'data/dummy_products.dart';
+import 'models/product.dart';
+import 'services/product_service.dart';
+
+// list keranjang global
+final List<Product> cartItems = [];
 
 void main() {
   runApp(const MyApp());
@@ -48,22 +52,17 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: primaryRed,
         foregroundColor: Colors.white,
         actions: [
-          // TOMBOL KERANJANG
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CartScreen(
-                    products: dummyProducts,
-                  ),
+                  builder: (context) => CartScreen(products: cartItems),
                 ),
               );
             },
           ),
-
-          // TOMBOL KATEGORI
           IconButton(
             icon: const Icon(Icons.category),
             onPressed: () {
@@ -75,8 +74,6 @@ class HomeScreen extends StatelessWidget {
               );
             },
           ),
-
-          // TOMBOL PROFILE
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
@@ -97,13 +94,9 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SearchBarWidget(),
-
             const SizedBox(height: 16),
-
             const PromoBanner(),
-
             const SizedBox(height: 16),
-
             const Text(
               'Kategori',
               style: TextStyle(
@@ -112,13 +105,9 @@ class HomeScreen extends StatelessWidget {
                 color: darkRed,
               ),
             ),
-
             const SizedBox(height: 8),
-
             const CategoryList(),
-
             const SizedBox(height: 16),
-
             const Text(
               'Rekomendasi Untukmu',
               style: TextStyle(
@@ -127,11 +116,23 @@ class HomeScreen extends StatelessWidget {
                 color: darkRed,
               ),
             ),
-
             const SizedBox(height: 8),
-
-            ProductGrid(
-              products: dummyProducts,
+            FutureBuilder<List<Product>>(
+              future: ProductService.fetchProducts(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                return ProductGrid(products: snapshot.data ?? []);
+              },
             ),
           ],
         ),
