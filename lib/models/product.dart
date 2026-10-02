@@ -10,6 +10,7 @@ class Product {
   final String sellerName;
   final String sellerLocation;
   final String description;
+  final int discountPercentage;
 
   const Product({
     required this.id,
@@ -23,5 +24,6 @@ class Product {
     required this.sellerName,
     required this.sellerLocation,
     required this.description,
+     this.discountPercentage = 0,
   });
 }
