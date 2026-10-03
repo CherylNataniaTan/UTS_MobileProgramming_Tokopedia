@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
-
-
+import 'package:UTS_MobileProgramming_Tokopedia/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,11 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login Berhasil! Selamat Datang.'),
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFFA01626)
         ),
       );
 
-      // Arahkan ke HomeScreen dan hapus stack halaman login
+      // PERBAIKAN: Menggunakan HomeScreen() (Huruf Kapital)
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -88,13 +86,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Email / Username',
-                      prefixIcon: const Icon(Icons.email_outlined, color: primaryRed),
+                      prefixIcon: const Icon(
+                        Icons.email_outlined,
+                        color: primaryRed,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: primaryRed, width: 2),
+                        borderSide: const BorderSide(
+                          color: primaryRed,
+                          width: 2,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -112,7 +116,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     obscureText: _isObscure,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_outline, color: primaryRed),
+                      prefixIcon: const Icon(
+                        Icons.lock_outline,
+                        color: primaryRed,
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isObscure ? Icons.visibility_off : Icons.visibility,
@@ -129,7 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: primaryRed, width: 2),
+                        borderSide: const BorderSide(
+                          color: primaryRed,
+                          width: 2,
+                        ),
                       ),
                     ),
                     validator: (value) {
