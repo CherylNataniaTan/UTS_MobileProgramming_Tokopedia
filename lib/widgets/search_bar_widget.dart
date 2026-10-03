@@ -10,7 +10,7 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
@@ -19,7 +19,6 @@ class SearchBarWidget extends StatelessWidget {
           ),
         );
       },
-      borderRadius: BorderRadius.circular(10),
       child: Container(
         height: 50,
         padding: const EdgeInsets.symmetric(horizontal: 12),

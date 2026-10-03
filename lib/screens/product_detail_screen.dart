@@ -6,19 +6,7 @@ import '../widgets/rating_widget.dart';
 import '../widgets/seller_info_widget.dart';
 import '../widgets/product_action_widget.dart';
 
-// Data ulasan dummy
-const List<Map<String, String>> _dummyReviews = [
-  {
-    'name': 'Andi S.',
-    'date': '2 minggu lalu',
-    'text': 'Barang sesuai deskripsi, pengiriman cepat. Recommended seller!',
-  },
-  {
-    'name': 'Rina M.',
-    'date': '1 bulan lalu',
-    'text': 'Kualitasnya bagus banget buat harga segini, packing rapi.',
-  },
-];
+
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -34,6 +22,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   int quantity = 1;
   bool descExpanded = false;
+  bool showAllReviews = false;
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -213,57 +202,76 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildReviews() {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _sectionTitle('Ulasan Pilihan'),
-              const Text(
-                'Lihat Semua',
-                style: TextStyle(color: green, fontWeight: FontWeight.bold),
+  final reviews = widget.product.reviews;
+  final shown = showAllReviews ? reviews : reviews.take(2).toList();
+
+  return Padding(
+    padding: const EdgeInsets.all(12.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _sectionTitle('Ulasan Pilihan'),
+            if (reviews.length > 2)
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    showAllReviews = !showAllReviews;
+                  });
+                },
+                child: Text(
+                  showAllReviews ? 'Lihat Sedikit' : 'Lihat Semua',
+                  style: const TextStyle(
+                      color: green, fontWeight: FontWeight.bold),
+                ),
               ),
-            ],
+          ],
+        ),
+        const SizedBox(height: 12),
+        if (reviews.isEmpty)
+          Text(
+            'Belum ada ulasan',
+            style: TextStyle(color: Colors.grey[600]),
           ),
-          const SizedBox(height: 12),
-          for (final review in _dummyReviews)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 14),
-                      const Icon(Icons.star, color: Colors.amber, size: 14),
-                      const Icon(Icons.star, color: Colors.amber, size: 14),
-                      const Icon(Icons.star, color: Colors.amber, size: 14),
-                      const Icon(Icons.star, color: Colors.amber, size: 14),
-                      const SizedBox(width: 6),
-                      Text(
-                        review['date']!,
-                        style:
-                            TextStyle(color: Colors.grey[600], fontSize: 12),
+        for (final review in shown)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    for (int i = 0; i < 5; i++)
+                      Icon(
+                        Icons.star,
+                        size: 14,
+                        color: i < review.rating
+                            ? Colors.amber
+                            : Colors.grey[300],
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    review['name']!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(review['text']!),
-                ],
-              ),
+                    const SizedBox(width: 6),
+                    Text(
+                      review.timeAgo,
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  review.reviewerName,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 2),
+                Text(review.comment),
+              ],
             ),
-        ],
-      ),
-    );
-  }
+          ),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
