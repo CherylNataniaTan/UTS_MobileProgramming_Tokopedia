@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../search/search_screen.dart';
 import '../category/category_screen.dart';
+import '../screens/Profile_Screen.dart';
 
 import '../widgets/search_bar_widget.dart';
 import '../widgets/promo_banner.dart';
@@ -22,10 +23,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'UntarianMart',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: primaryRed,
         foregroundColor: Colors.white,
@@ -35,9 +33,7 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
               );
             },
           ),
@@ -46,9 +42,17 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const CategoryScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const CategoryScreen()),
+              );
+            },
+          ),
+          // tombol buat profile
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
           ),
@@ -93,9 +97,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            ProductGrid(
-              products: dummyProducts,
-            ),
+            ProductGrid(products: dummyProducts),
           ],
         ),
       ),
