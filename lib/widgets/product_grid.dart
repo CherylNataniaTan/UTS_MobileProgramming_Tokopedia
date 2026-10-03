@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+
 import '../models/product.dart';
-import '../screens/product_detail_screen.dart';
+import '../screens/product_detail_screen.dart'; // sesuaikan path-nya
 
 class ProductGrid extends StatefulWidget {
   final List<Product> products;
 
-  const ProductGrid({
-    super.key,
-    required this.products,
-  });
+  const ProductGrid({super.key, required this.products});
 
   @override
   State<ProductGrid> createState() => _ProductGridState();
@@ -23,26 +21,27 @@ class _ProductGridState extends State<ProductGrid> {
   static const Color orange = Color(0xFFE89D2D);
 
   void toggleFavorite(String productId) {
-      setState(() {
-        if (favoriteIds.contains(productId)) {
-          favoriteIds.remove(productId);
-        } else {
-          favoriteIds.add(productId);
-        }
-      });
-    }
+    setState(() {
+      if (favoriteIds.contains(productId)) {
+        favoriteIds.remove(productId);
+      } else {
+        favoriteIds.add(productId);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
       itemCount: widget.products.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 0.7,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 0.65,
       ),
       itemBuilder: (context, index) {
         final product = widget.products[index];
@@ -58,28 +57,26 @@ class _ProductGridState extends State<ProductGrid> {
             );
           },
           child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: lightGray,
+            decoration: BoxDecoration(
+              border: Border.all(color: lightGray),
+              borderRadius: BorderRadius.circular(10),
             ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  children: [
-                   AspectRatio(
-                      aspectRatio: 1.15,
-                      child: Image.network(
-                        product.imageUrl,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 1.15,
+                        child: Image.network(
+                          product.imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
                       ),
-                    ),
-                     if (product.discountPercentage > 0)
+                      if (product.discountPercentage > 0)
                         Positioned(
                           top: 6,
                           right: 6,
@@ -104,7 +101,6 @@ class _ProductGridState extends State<ProductGrid> {
                         ),
                     ],
                   ),
- 
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Column(
@@ -114,30 +110,37 @@ class _ProductGridState extends State<ProductGrid> {
                           product.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: gray,
-                          ),
+                          style: const TextStyle(color: gray),
                         ),
-
                         const SizedBox(height: 4),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Rp ${product.price.toString().replaceAllMapped(
-                                RegExp(r'\B(?=(\d{3})+(?!\d))'),
-                                (match) => '.',
-                              )}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: primaryRed,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Rp ${product.discountedPrice.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => '.')}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: primaryRed,
+                                    ),
+                                  ),
+                                  if (product.discountPercentage > 0)
+                                    Text(
+                                      'Rp ${product.price.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => '.')}',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: gray,
+                                        decoration: TextDecoration.lineThrough,
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
-                                toggleFavorite(product.id);
-                              },
+                              onTap: () => toggleFavorite(product.id),
                               child: Icon(
                                 isFavorite
                                     ? Icons.favorite
@@ -148,20 +151,12 @@ class _ProductGridState extends State<ProductGrid> {
                             ),
                           ],
                         ),
-
                         Row(
                           children: [
-                            const Icon(
-                              Icons.star,
-                              size: 14,
-                              color: orange,
-                            ),
+                            const Icon(Icons.star, size: 14, color: orange),
                             Text(
                               ' ${product.rating}',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: gray,
-                              ),
+                              style: const TextStyle(fontSize: 12, color: gray),
                             ),
                           ],
                         ),

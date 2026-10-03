@@ -6,7 +6,7 @@ import 'checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({
-    super.key,
+    super.key, required List<Product> products,
   });
 
   @override
