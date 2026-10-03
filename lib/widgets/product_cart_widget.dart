@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../screens/product_detail_screen.dart';
 
-class ProductCardWidget extends StatelessWidget {
+class ProductcartWidget extends StatelessWidget {
   final Product product;
 
-  const ProductCardWidget({
+  const ProductcartWidget({
     super.key,
     required this.product,
   });
@@ -88,7 +88,7 @@ class ProductCardWidget extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: Colors.red,
                     ),
                   ),
                   const SizedBox(height: 4),

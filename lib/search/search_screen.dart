@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../data/dummy_products.dart';
+import 'package:tokopedia/models/product.dart';
+import 'package:tokopedia/services/product_service.dart';
 import 'search_result_tile.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -12,13 +12,28 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
-
   String searchQuery = '';
+  late Future<List<Product>> _futureResults;
 
   static const Color primaryRed = Color(0xFFA01626);
   static const Color darkRed = Color(0xFF700D1B);
   static const Color gray = Color(0xFF575757);
   static const Color lightGray = Color(0xFFDADAD9);
+
+  @override
+  void initState() {
+    super.initState();
+    _futureResults = ProductService.fetchProducts();
+  }
+
+  void _search(String value) {
+    setState(() {
+      searchQuery = value;
+      _futureResults = value.trim().isEmpty
+          ? ProductService.fetchProducts()
+          : ProductService.searchProducts(value.trim());
+    });
+  }
 
   @override
   void dispose() {
@@ -28,12 +43,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredProducts = dummyProducts.where((product) {
-      return product.name.toLowerCase().contains(
-            searchQuery.toLowerCase(),
-          );
-    }).toList();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cari Produk'),
@@ -46,69 +55,58 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             TextField(
               controller: searchController,
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value;
-                });
-              },
+              onSubmitted: _search,
+              onChanged: (value) => setState(() => searchQuery = value),
               decoration: InputDecoration(
                 hintText: 'Cari produk...',
-                hintStyle: const TextStyle(
-                  color: gray,
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: primaryRed,
-                ),
+                hintStyle: const TextStyle(color: gray),
+                prefixIcon: const Icon(Icons.search, color: primaryRed),
                 suffixIcon: searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(
-                          Icons.clear,
-                          color: primaryRed,
-                        ),
+                        icon: const Icon(Icons.clear, color: primaryRed),
                         onPressed: () {
                           searchController.clear();
-
-                          setState(() {
-                            searchQuery = '';
-                          });
+                          _search('');
                         },
                       )
                     : null,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(
-                    color: primaryRed,
-                    width: 2,
-                  ),
+                  borderSide: const BorderSide(color: primaryRed, width: 2),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(
-                    color: lightGray,
-                  ),
+                  borderSide: const BorderSide(color: lightGray),
                 ),
               ),
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: filteredProducts.isEmpty
-                  ? const Center(
+              child: FutureBuilder<List<Product>>(
+                future: _futureResults,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  final products = snapshot.data ?? [];
+                  if (products.isEmpty) {
+                    return const Center(
                       child: Text(
                         'Produk tidak ditemukan',
-                        style: TextStyle(
-                          color: darkRed,
-                        ),
+                        style: TextStyle(color: darkRed),
                       ),
-                    )
-                  : ListView.builder(
-                      itemCount: filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        return SearchResultTile(
-                          product: filteredProducts[index],
-                        );
-                      },
-                    ),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: products.length,
+                    itemBuilder: (context, index) =>
+                        SearchResultTile(product: products[index]),
+                  );
+                },
+              ),
             ),
           ],
         ),
