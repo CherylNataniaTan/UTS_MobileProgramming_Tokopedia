@@ -8,7 +8,7 @@ import 'widgets/promo_banner.dart';
 import 'widgets/category_list.dart';
 import 'widgets/product_grid.dart';
 import 'data/dummy_products.dart';
-import 'data/dummy_products.dart';
+
 
 void main() {
   runApp(const MyApp());

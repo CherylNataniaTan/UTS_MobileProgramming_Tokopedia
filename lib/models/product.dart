@@ -10,7 +10,6 @@ class Product {
   final String sellerName;
   final String sellerLocation;
   final String description;
-  final int discountPercentage;
 
   const Product({
     required this.id,
@@ -24,6 +23,21 @@ class Product {
     required this.sellerName,
     required this.sellerLocation,
     required this.description,
-     this.discountPercentage = 0,
   });
+
+factory Product.fromJson(Map<String, dynamic> json) {
+  return Product(
+    id: json['id'].toString(),
+    name: json['title'] ?? '',
+    price: ((json['price'] as num) * 16000).toInt(),
+    imageUrl: json['thumbnail'] ?? '',
+    rating: (json['rating'] as num).toDouble(),
+    category: json['category'] ?? '',
+    reviewCount: (json['reviews'] as List?)?.length ?? 0,
+    sold: (json['stock'] as num?)?.toInt() ?? 0,
+    sellerName: json['brand'] ?? 'UntarianMart',
+    sellerLocation: 'Jakarta',
+    description: json['description'] ?? '',
+  );
+}
 }

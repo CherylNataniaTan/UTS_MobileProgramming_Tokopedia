@@ -15,7 +15,6 @@ final List<Product> dummyProducts = [
     description:
         'Kaos polos bahan cotton combed 30s, adem dan gak gampang melar. '
         'Cocok buat dipake sehari-hari atau bahan sablon custom.',
-    discountPercentage: 20,
   ),
 
   const Product(
@@ -48,7 +47,6 @@ final List<Product> dummyProducts = [
     description:
         'Tas ransel muat laptop hingga 15 inch, bahan waterproof, '
         'banyak kompartemen buat nyimpen barang bawaan.',
-     discountPercentage: 29,
   ),
 
   const Product(
@@ -97,6 +95,5 @@ final List<Product> dummyProducts = [
     description:
         'Headset bluetooth true wireless, suara jernih, dilengkapi charging '
         'case. Cocok buat nelepon maupun dengerin musik.',
-    discountPercentage: 15,
   ),
 ];
