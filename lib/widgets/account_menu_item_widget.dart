@@ -24,14 +24,11 @@ class AccountMenuItemWidget extends StatelessWidget {
           color: Colors.green[50],
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, color: Colors.green[800]),
+        child: Icon(icon, color: const Color.fromARGB(255, 112, 13, 27)),
       ),
       title: Text(
         title,
-        style: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
+        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
       ),
       subtitle: subtitle != null
           ? Text(
@@ -39,10 +36,7 @@ class AccountMenuItemWidget extends StatelessWidget {
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             )
           : null,
-      trailing: const Icon(
-        Icons.chevron_right,
-        color: Colors.grey,
-      ),
+      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       onTap: onTap,
     );
   }

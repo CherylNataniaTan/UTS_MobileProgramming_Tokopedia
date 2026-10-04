@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tokopedia/models/product.dart';
+import '../models/product.dart';
+
 import '../data/cart_data.dart';
 import '../widgets/cart_item_widget.dart';
 import 'checkout_screen.dart';
@@ -15,11 +16,6 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   List<Product> selectedProducts = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void increaseQuantity(Product product) {
     setState(() {
@@ -93,6 +89,7 @@ class _CartScreenState extends State<CartScreen> {
         foregroundColor: Colors.white,
       ),
       backgroundColor: const Color(0xFFF5DDE0),
+
       body: cartProducts.isEmpty
           ? const Center(
               child: Text(
@@ -129,12 +126,14 @@ class _CartScreenState extends State<CartScreen> {
                           });
                         },
                       ),
+
                       Expanded(
                         child: CartItemWidget(
                           productName: product.name,
                           imageUrl: product.imageUrl,
                           price: product.price,
-                          quantity: cartQuantities[product.id] ?? 1,
+                          quantity:
+                              cartQuantities[product.id] ?? 1,
                           onIncrease: () {
                             increaseQuantity(product);
                           },
@@ -151,6 +150,7 @@ class _CartScreenState extends State<CartScreen> {
                 );
               },
             ),
+
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(12),
         color: Colors.white,

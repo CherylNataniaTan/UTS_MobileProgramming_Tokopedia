@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../screens/Alamat_Pengiriman_Screen.dart';
 
 class ShippingAddressWidget extends StatefulWidget {
   const ShippingAddressWidget({super.key});
@@ -9,74 +12,70 @@ class ShippingAddressWidget extends StatefulWidget {
 }
 
 class _ShippingAddressWidgetState extends State<ShippingAddressWidget> {
-  String selectedName = 'Wilbert';
-  String selectedAddress = 'Jl. Contoh No. 123, Jakarta Barat';
+  String selectedName = '';
+  String selectedAddress = '';
+  String selectedLabel = '';
 
-  void changeAddress() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Pilih Alamat'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: const Text('Rumah'),
-                subtitle: const Text(
-                  'Jl. Contoh No. 123, Jakarta Barat',
-                ),
-                onTap: () {
-                  setState(() {
-                    selectedName = 'Wilbert';
-                    selectedAddress =
-                        'Jl. Contoh No. 123, Jakarta Barat';
-                  });
+  @override
+  void initState() {
+    super.initState();
+    _loadAlamat();
+  }
 
-                  Navigator.pop(context);
-                },
-              ),
+  Future<void> _loadAlamat() async {
+    final prefs = await SharedPreferences.getInstance();
 
-              ListTile(
-                title: const Text('Kos'),
-                subtitle: const Text(
-                  'Jl. Mawar No. 10, Jakarta Barat',
-                ),
-                onTap: () {
-                  setState(() {
-                    selectedName = 'Wilbert';
-                    selectedAddress =
-                        'Jl. Mawar No. 10, Jakarta Barat';
-                  });
+    final nama = prefs.getString('alamat_nama') ?? '';
+    final provinsi = prefs.getString('alamat_provinsi') ?? '';
+    final jalan = prefs.getString('alamat_jalan') ?? '';
+    final detail = prefs.getString('alamat_detail') ?? '';
+    final label = prefs.getString('alamat_label') ?? '';
 
-                  Navigator.pop(context);
-                },
-              ),
+    String alamat = '';
 
-              ListTile(
-                title: const Text('Kantor'),
-                subtitle: const Text(
-                  'Jl. Sudirman No. 20, Jakarta Pusat',
-                ),
-                onTap: () {
-                  setState(() {
-                    selectedName = 'Wilbert';
-                    selectedAddress =
-                        'Jl. Sudirman No. 20, Jakarta Pusat';
-                  });
+    if (jalan.isNotEmpty) {
+      alamat = jalan;
+    }
 
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
+    if (detail.isNotEmpty) {
+      if (alamat.isNotEmpty) {
+        alamat += ', ';
+      }
+      alamat += detail;
+    }
+
+    if (provinsi.isNotEmpty) {
+      if (alamat.isNotEmpty) {
+        alamat += ', ';
+      }
+      alamat += provinsi;
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      selectedName = nama;
+      selectedAddress = alamat;
+      selectedLabel = label;
+    });
+  }
+
+  Future<void> changeAddress() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AlamatPengirimanScreen(),
+      ),
     );
+
+    _loadAlamat();
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool hasAddress =
+        selectedName.isNotEmpty && selectedAddress.isNotEmpty;
+
     return Container(
       padding: const EdgeInsets.all(15),
       color: Colors.white,
@@ -93,29 +92,61 @@ class _ShippingAddressWidgetState extends State<ShippingAddressWidget> {
 
           const SizedBox(height: 10),
 
-          Text(
-            selectedName,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+          if (hasAddress) ...[
+            Row(
+              children: [
+                Text(
+                  selectedLabel.isEmpty ? 'Alamat' : selectedLabel,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-          ),
 
-          const SizedBox(height: 5),
+            const SizedBox(height: 5),
 
-          Text(
-            selectedAddress,
-            style: const TextStyle(
-              color: Colors.grey,
+            Text(
+              selectedName,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
+
+            const SizedBox(height: 5),
+
+            Text(
+              selectedAddress,
+              style: const TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ] else ...[
+            const Text(
+              'Belum ada alamat pengiriman',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+
+            const SizedBox(height: 5),
+
+            const Text(
+              'Tambahkan alamat terlebih dahulu melalui Profile.',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 13,
+              ),
+            ),
+          ],
 
           const SizedBox(height: 10),
 
           TextButton(
             onPressed: changeAddress,
-            child: const Text(
-              'Ubah Alamat',
-              style: TextStyle(
+            child: Text(
+              hasAddress ? 'Ubah Alamat' : 'Tambah Alamat',
+              style: const TextStyle(
                 color: Colors.red,
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tokopedia/models/product.dart';
-import 'package:tokopedia/services/product_service.dart';
+import '../models/product.dart';
+import '../services/product_service.dart';
 
 import '../search/category_filter_chip.dart';
 import '../search/search_result_tile.dart';
