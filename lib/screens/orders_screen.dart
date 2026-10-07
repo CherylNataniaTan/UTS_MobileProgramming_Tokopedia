@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/order_model.dart';
-import '../widgets/ticker_builder.dart';
+import '../widgets/ticker_builder_widget.dart';
 import 'order_detail_screen.dart';
 
 class OrdersScreen extends StatefulWidget {
