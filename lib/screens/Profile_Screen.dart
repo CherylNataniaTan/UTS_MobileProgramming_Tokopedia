@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../models/user_model.dart';
 import '../models/order_model.dart';
-import '../models/voucher_model.dart';
+// import '../models/voucher_model.dart';
 import '../services/profile_storage_service.dart';
 import '../services/language_manager.dart';
 import '../widgets/profile_header_widget.dart';
 import '../widgets/order_status_widget.dart';
 import '../widgets/voucher_widget.dart';
 import '../widgets/menu_list_widget.dart';
+import '../data/voucher_data.dart';
 
 import 'edit_profile_screen.dart';
 import 'orders_screen.dart';
@@ -49,23 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final orders = dummyOrders;
 
-    final vouchers = [
-      VoucherModel(
-        code: 'HEMAT20',
-        discount: '20%',
-        description: 'Diskon maksimal Rp20.000',
-      ),
-      VoucherModel(
-        code: 'GRATISONGKIR',
-        discount: '100%',
-        description: 'Bebas ongkir seluruh Indonesia',
-      ),
-      VoucherModel(
-        code: 'CASHOFF50',
-        discount: '50%',
-        description: 'Cashback khusus pengguna baru',
-      ),
-    ];
+    final vouchers = userVouchers;
 
     final processingCount = orders.where((o) => o.status == 'Diproses').length;
     final shippingCount = orders.where((o) => o.status == 'Dikirim').length;

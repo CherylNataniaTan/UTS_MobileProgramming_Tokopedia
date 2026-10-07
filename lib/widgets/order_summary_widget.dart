@@ -2,20 +2,29 @@ import 'package:flutter/material.dart';
 
 class OrderSummaryWidget extends StatelessWidget {
   final int subtotal;
+  final int productDiscount;
   final int shipping;
-  final int discount;
+  final int shippingDiscount;
+  final int voucherDiscount;
 
   const OrderSummaryWidget({
     super.key,
     required this.subtotal,
+    required this.productDiscount,
     required this.shipping,
-    required this.discount,
+    required this.shippingDiscount,
+    required this.voucherDiscount,
   });
 
-   @override
+  @override
   Widget build(BuildContext context) {
-    int total = subtotal + shipping - discount;
-     return Container(
+    final int total = subtotal -
+        productDiscount +
+        shipping -
+        shippingDiscount -
+        voucherDiscount;
+
+    return Container(
       padding: const EdgeInsets.all(15),
       color: Colors.white,
       child: Column(
@@ -28,8 +37,8 @@ class OrderSummaryWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          
           const SizedBox(height: 15),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -39,6 +48,22 @@ class OrderSummaryWidget extends StatelessWidget {
           ),
 
           const SizedBox(height: 8),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Diskon Produk'),
+              Text(
+                '-Rp$productDiscount',
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 8),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -46,22 +71,39 @@ class OrderSummaryWidget extends StatelessWidget {
               Text('Rp$shipping'),
             ],
           ),
-           const SizedBox(height: 8),
+
+          const SizedBox(height: 8),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Diskon'),
+              const Text('Diskon Pengiriman'),
               Text(
-                '-Rp$discount',
+                '-Rp$shippingDiscount',
                 style: const TextStyle(
                   color: Colors.red,
                 ),
               ),
             ],
           ),
-          
+
+          const SizedBox(height: 8),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Voucher Diskon'),
+              Text(
+                '-Rp$voucherDiscount',
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+
           const Divider(),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -71,7 +113,7 @@ class OrderSummaryWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-               Text(
+              Text(
                 'Rp$total',
                 style: const TextStyle(
                   color: Colors.red,
