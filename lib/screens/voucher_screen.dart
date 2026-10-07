@@ -9,7 +9,17 @@ class VoucherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Voucher Saya'), backgroundColor: Color.from(alpha: 1, red: 0.439, green: 0.051, blue: 0.106),),
+        appBar: AppBar(
+        title: const Text(
+          'Voucher Saya',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: const Color(0xFF700D1B),
+        foregroundColor: Colors.white,
+      ),
       body: vouchers.isEmpty
           ? const Center(child: Text('Belum Ada Voucher'))
           : ListView.builder(

@@ -7,7 +7,9 @@ import '../search/search_result_tile.dart';
 import 'category_grid_full.dart';
 
 class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({super.key});
+  final String initialCategory;
+
+  const CategoryScreen({super.key, this.initialCategory = 'Semua'});
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
@@ -41,6 +43,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   void initState() {
     super.initState();
+    selectedCategory = widget.initialCategory;
     _futureProducts = _load();
   }
 

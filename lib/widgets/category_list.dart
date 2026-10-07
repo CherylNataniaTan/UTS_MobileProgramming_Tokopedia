@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../category/category_screen.dart';
 
 class CategoryList extends StatelessWidget {
   const CategoryList({super.key});
@@ -11,9 +12,9 @@ class CategoryList extends StatelessWidget {
     {'label': 'Olahraga', 'icon': Icons.sports_soccer},
   ];
 
-  static const Color primaryRed = Color.fromARGB(255, 255, 232, 235);
+  static const Color primaryRed = Color(0xFFA01626);
   static const Color darkRed = Color(0xFF700D1B);
-  static const Color lightGray = Color.fromARGB(255, 46, 82, 53);
+  static const Color lightPink = Color(0xFFF8E6E9);
 
   @override
   Widget build(BuildContext context) {
@@ -27,25 +28,37 @@ class CategoryList extends StatelessWidget {
 
           return Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 26,
-                  backgroundColor: lightGray,
-                  child: Icon(
-                    category['icon'],
-                    color: primaryRed,
+             child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoryScreen(
+                      initialCategory: category['label'] as String,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  category['label'],
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: darkRed,
+                );
+              },
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 26,
+                    backgroundColor: lightPink,
+                    child: Icon(
+                      category['icon'],
+                      color: primaryRed,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 6),
+                  Text(
+                    category['label'],
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: darkRed,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

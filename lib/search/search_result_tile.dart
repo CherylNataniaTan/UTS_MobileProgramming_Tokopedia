@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../screens/product_detail_screen.dart';
 
 class SearchResultTile extends StatelessWidget {
   final Product product;
@@ -20,6 +21,14 @@ class SearchResultTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       child: ListTile(
+         onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductDetailScreen(product: product),
+            ),
+          );
+        },
         contentPadding: const EdgeInsets.all(8),
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(8),
