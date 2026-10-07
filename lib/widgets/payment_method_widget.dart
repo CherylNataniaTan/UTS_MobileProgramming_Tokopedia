@@ -42,7 +42,7 @@ class PaymentMethodWidget extends StatelessWidget {
 
           RadioListTile<String>(
             title: const Text('E-Wallet'),
-            subtitle: const Text('GoPay'),
+            subtitle: const Text('UntarPay'),
             value: 'E-Wallet',
             // ignore: deprecated_member_use
             groupValue: selectedMethod,
