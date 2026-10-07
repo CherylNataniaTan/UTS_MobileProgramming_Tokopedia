@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:UTS_MobileProgramming_Tokopedia/screens/home_screen.dart';
+
 import '../services/auth_service.dart';
+import '../services/local_account_service.dart';
+import 'main_navigation.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isObscure = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -23,25 +27,60 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleLogin() async {
-    if (_formKey.currentState!.validate()) {
-      // simpan sesi login biar pas app dibuka lagi nggak perlu login ulang
-      await AuthService.login(_emailController.text.trim());
+    if (!_formKey.currentState!.validate()) return;
 
-      if (!mounted) return;
+    setState(() => _isLoading = true);
 
-      // Tampilkan pesan sukses login
+    final account = await LocalAccountService.login(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (account == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Login Berhasil! Selamat Datang.'),
-          backgroundColor: Color(0xFFA01626),
+          content: Text('Akun tidak ditemukan atau password salah. '
+              'Silakan daftar terlebih dahulu.'),
+          backgroundColor: Colors.red,
         ),
       );
+      return;
+    }
+    await LocalAccountService.setCurrent(account);
+    await AuthService.login(_emailController.text.trim());
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-        (route) => false,
-      );
+    if (!mounted) return;
+
+    // Tampilkan pesan sukses login
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Login Berhasil! Selamat Datang.'),
+        backgroundColor: Color(0xFFA01626),
+      ),
+    );
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const MainNavigation()),
+      (route) => false,
+    );
+  }
+
+  Future<void> _goToRegister() async {
+    final username = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const RegisterScreen()),
+    );
+
+    // isi otomatis kolom email/username setelah daftar
+    if (username != null) {
+      setState(() {
+        _emailController.text = username;
+        _passwordController.clear();
+      });
     }
   }
 
@@ -161,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Masuk
                   ElevatedButton(
-                    onPressed: _handleLogin,
+                    onPressed: _isLoading ? null : _handleLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryRed,
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -169,14 +208,45 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text(
-                      'Masuk',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            'Masuk',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Link ke halaman register
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Belum punya akun? ',
+                        style: TextStyle(color: Colors.grey[600]),
                       ),
-                    ),
+                      GestureDetector(
+                        onTap: _goToRegister,
+                        child: const Text(
+                          'Daftar',
+                          style: TextStyle(
+                            color: primaryRed,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

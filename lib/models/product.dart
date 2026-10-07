@@ -5,6 +5,7 @@ class Product {
   final String name;
   final int price;
   final String imageUrl;
+  final List<String> images;
   final double rating;
   final String category;
   final int reviewCount;
@@ -20,6 +21,7 @@ class Product {
     required this.name,
     required this.price,
     required this.imageUrl,
+    this.images = const [],
     required this.rating,
     required this.category,
     required this.reviewCount,
@@ -36,11 +38,21 @@ class Product {
         .map((e) => Review.fromJson(e))
         .toList();
 
+    final thumbnail = json['thumbnail'] ?? '';
+
+    // Foto galeri dari API; kalau kosong, pakai thumbnail saja
+    final imageList = (json['images'] as List? ?? [])
+        .map((e) => e.toString())
+        .toList();
+
     return Product(
       id: json['id'].toString(),
       name: json['title'] ?? '',
       price: ((json['price'] as num) * 16000).toInt(),
-      imageUrl: json['thumbnail'] ?? '',
+      imageUrl: thumbnail,
+      images: imageList.isNotEmpty
+          ? imageList
+          : (thumbnail.isNotEmpty ? [thumbnail] : []),
       rating: (json['rating'] as num).toDouble(),
       category: json['category'] ?? '',
       reviewCount: reviewList.length,
@@ -55,6 +67,5 @@ class Product {
   }
 
   int get discountedPrice =>
-  (price * (1- discountPercentage / 100)).round();
-    
+      (price * (1 - discountPercentage / 100)).round();
 }

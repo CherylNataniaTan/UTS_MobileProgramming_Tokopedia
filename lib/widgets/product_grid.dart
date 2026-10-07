@@ -77,7 +77,7 @@ class _ProductGridState extends State<ProductGrid> {
                         aspectRatio: 1.15,
                         child: Image.network(
                           product.imageUrl,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           width: double.infinity,
                         ),
                       ),

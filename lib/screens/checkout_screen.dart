@@ -1,14 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
+import '../data/voucher_data.dart';
 import '../models/product.dart';
 import '../models/shop_model.dart';
 import '../models/order_model.dart';
+import '../models/voucher_model.dart';
 import '../widgets/shipping_address_widget.dart';
 import '../widgets/payment_method_widget.dart';
 import '../widgets/order_summary_widget.dart';
 import '../data/untarpay_data.dart';
+import '../widgets/voucher_checkout_widget.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<Product> products;
@@ -29,6 +31,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   static const Color darkRed = Color(0xFF700D1B);
 
   String selectedPayment = 'COD';
+
+  List<VoucherModel> selectedVouchers = [];
 
   final int shipping = Random().nextInt(20001) + 5000;
   
@@ -59,7 +63,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return true;
   }
 
-  // bikin pesanan di menu transaksi, 1 pesanan per toko (kayak Tokped)
+
   void _createOrders() {
     final Map<String, List<Product>> grouped = {};
 
@@ -71,18 +75,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final shippingPerShop = shipping ~/ grouped.length;
 
     grouped.forEach((shopId, products) {
-      final shop = dummyShops.firstWhere((s) => s.id == shopId);
+      final shop = dummyShops.firstWhere(
+        (s) => s.id == shopId,
+      );
 
       final items = products.map((p) {
         return OrderItem(
           productName: p.name,
           imageUrl: p.imageUrl,
-          price: p.price,
+          price: p.discountedPrice,
           quantity: widget.quantities[p.id] ?? 1,
         );
       }).toList();
 
       int itemsTotal = 0;
+
       for (var item in items) {
         itemsTotal += item.price * item.quantity;
       }
@@ -107,17 +114,144 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     });
   }
 
+  void _showVoucherSelection() {
+    List<VoucherModel> tempVouchers = List.from(selectedVouchers);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return SafeArea(
+              child: Container(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Pilih Voucher',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    ...userVouchers.map(
+                      (voucher) {
+                        final isSelected =
+                            tempVouchers.contains(voucher);
+
+                        return CheckboxListTile(
+                          value: isSelected,
+                          activeColor: primaryRed,
+                          controlAffinity:
+                              ListTileControlAffinity.leading,
+
+                          title: Text(
+                            '${voucher.code} (${voucher.discount})',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          subtitle: Text(
+                            voucher.description,
+                          ),
+
+                          onChanged: (value) {
+                            setModalState(() {
+                              if (value == true) {
+                                tempVouchers.add(voucher);
+                              } else {
+                                tempVouchers.remove(voucher);
+                              }
+                            });
+                          },
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedVouchers = tempVouchers;
+                          });
+
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryRed,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                          ),
+                        ),
+                        child: const Text(
+                          'Gunakan Voucher',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     int subtotal = 0;
+    int productDiscount = 0;
 
     for (var product in widget.products) {
       int quantity = widget.quantities[product.id] ?? 1;
 
       subtotal += product.price * quantity;
+
+      productDiscount +=
+          (product.price - product.discountedPrice) * quantity;
     }
 
-    int discount = 0;
+    int shippingDiscount = 0;
+    int voucherDiscount = 0;
+
+    for (var voucher in selectedVouchers) {
+      if (voucher.code == 'GRATISONGKIR') {
+        shippingDiscount = shipping;
+      }
+
+      if (voucher.code == 'HEMAT20') {
+        int discount =
+            ((subtotal - productDiscount) * 20) ~/ 100;
+
+        if (discount > 20000) {
+          discount = 20000;
+        }
+
+        voucherDiscount += discount;
+      }
+
+      if (voucher.code == 'CASHOFF50') {
+        int discount =
+            ((subtotal - productDiscount) * 50) ~/ 100;
+
+        voucherDiscount += discount;
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -157,8 +291,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 ...widget.products.map((product) {
                   int quantity = widget.quantities[product.id] ?? 1;
-
-                  int totalProduct = product.price * quantity;
+                    int totalProduct =
+                        product.discountedPrice * quantity;
 
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
@@ -183,6 +317,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           const SizedBox(height: 12),
 
+          VoucherCheckoutWidget(
+            selectedVoucher: selectedVouchers.isEmpty
+                ? null
+                : selectedVouchers.first,
+            onTap: _showVoucherSelection,
+          ),
+
+          const SizedBox(height: 12),
+
           PaymentMethodWidget(
             selectedMethod: selectedPayment,
             onChanged: (value) {
@@ -196,8 +339,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           OrderSummaryWidget(
             subtotal: subtotal,
+            productDiscount: productDiscount,
             shipping: shipping,
-            discount: discount,
+            shippingDiscount: shippingDiscount,
+            voucherDiscount: voucherDiscount,
           ),
 
           const SizedBox(height: 12),
@@ -222,7 +367,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryRed,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 15),
+              padding: const EdgeInsets.symmetric(
+                vertical: 15,
+              ),
             ),
 
             child: const Text(

@@ -13,9 +13,15 @@ class OrderItem {
 }
 
 class OrderModel {
+  // Durasi simulasi (detik). Ubah angka ini untuk demo.
+  static const int shipAfterSeconds = 30;
+  static const int doneAfterSeconds = 90;
+
   final String id;
   final String productName;
-  String status; // Diproses, Dikirim, Selesai
+
+  String _status; // status manual (untuk order dummy / override)
+  bool _autoProgress; // true = status dihitung otomatis dari waktu
 
   final String shopName;
   final List<OrderItem> items;
@@ -27,14 +33,39 @@ class OrderModel {
   OrderModel({
     required this.id,
     required this.productName,
-    required this.status,
+    String status = 'Diproses',
+    bool autoProgress = false,
     this.shopName = 'UntarianMart',
     this.items = const [],
     this.shipping = 0,
     this.total = 0,
     this.paymentMethod = 'COD',
     DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
+  })  : _status = status,
+        _autoProgress = autoProgress,
+        createdAt = createdAt ?? DateTime.now();
+
+  /// Diproses, Dikirim, Selesai
+  String get status {
+    if (!_autoProgress) return _status;
+    final s = DateTime.now().difference(createdAt).inSeconds;
+    if (s < shipAfterSeconds) return 'Diproses';
+    if (s < doneAfterSeconds) return 'Dikirim';
+    return 'Selesai';
+  }
+
+  /// Kalau ada layar yang mengubah status manual (misal tombol
+  /// "Pesanan Diterima"), auto-progress dimatikan dan status dikunci.
+  set status(String value) {
+    _status = value;
+    _autoProgress = false;
+  }
+
+  // Waktu tiap tahap, berguna untuk timeline di halaman detail
+  DateTime get shippedAt =>
+      createdAt.add(const Duration(seconds: shipAfterSeconds));
+  DateTime get doneAt =>
+      createdAt.add(const Duration(seconds: doneAfterSeconds));
 }
 
 String formatRupiah(int value) {

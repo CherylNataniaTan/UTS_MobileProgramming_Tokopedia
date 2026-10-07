@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+
 import '../data/cart_data.dart';
+import '../models/order_model.dart';
 import '../models/product.dart';
 import '../widgets/product_image_widget.dart';
 import '../widgets/product_info_widget.dart';
 import '../widgets/rating_widget.dart';
 import '../widgets/seller_info_widget.dart';
 import '../widgets/product_action_widget.dart';
+import '../widgets/product_review_section.dart';
 import 'cart_screen.dart';
-
-
+import 'checkout_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -24,12 +26,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   int quantity = 1;
   bool descExpanded = false;
-  bool showAllReviews = false;
+
+  // true kalau ada pesanan produk ini yang statusnya Selesai.
+  // CATATAN: 'productName' adalah tebakan nama field di OrderModel,
+  // sesuaikan kalau di model kamu namanya beda (misal 'title' / 'name').
+  bool get _hasReceived => dummyOrders.any(
+        (o) => o.status == 'Selesai' && o.productName == widget.product.name,
+      );
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   // Pembatas antar bagian (abu-abu tebal kayak di Tokopedia)
@@ -78,8 +85,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           const SizedBox(height: 10),
           Row(
             children: [
-              Icon(Icons.location_on_outlined,
-                  size: 20, color: Colors.grey[700]),
+              Icon(
+                Icons.location_on_outlined,
+                size: 20,
+                color: Colors.grey[700],
+              ),
               const SizedBox(width: 8),
               Text('Dikirim dari ${widget.product.sellerLocation}'),
             ],
@@ -87,8 +97,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           const SizedBox(height: 8),
           Row(
             children: [
-              Icon(Icons.local_shipping_outlined,
-                  size: 20, color: Colors.grey[700]),
+              Icon(
+                Icons.local_shipping_outlined,
+                size: 20,
+                color: Colors.grey[700],
+              ),
               const SizedBox(width: 8),
               const Text('Ongkir mulai Rp9.000'),
             ],
@@ -179,8 +192,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Text(
             widget.product.description,
             maxLines: descExpanded ? null : 2,
-            overflow:
-                descExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+            overflow: descExpanded
+                ? TextOverflow.visible
+                : TextOverflow.ellipsis,
             style: const TextStyle(height: 1.4),
           ),
           const SizedBox(height: 8),
@@ -192,88 +206,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             },
             child: Text(
               descExpanded ? 'Lihat Lebih Sedikit' : 'Selengkapnya',
-              style: const TextStyle(
-                color: green,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(color: green, fontWeight: FontWeight.bold),
             ),
           ),
         ],
       ),
     );
   }
-
-  Widget _buildReviews() {
-  final reviews = widget.product.reviews;
-  final shown = showAllReviews ? reviews : reviews.take(2).toList();
-
-  return Padding(
-    padding: const EdgeInsets.all(12.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _sectionTitle('Ulasan Pilihan'),
-            if (reviews.length > 2)
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    showAllReviews = !showAllReviews;
-                  });
-                },
-                child: Text(
-                  showAllReviews ? 'Lihat Sedikit' : 'Lihat Semua',
-                  style: const TextStyle(
-                      color: green, fontWeight: FontWeight.bold),
-                ),
-              ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        if (reviews.isEmpty)
-          Text(
-            'Belum ada ulasan',
-            style: TextStyle(color: Colors.grey[600]),
-          ),
-        for (final review in shown)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    for (int i = 0; i < 5; i++)
-                      Icon(
-                        Icons.star,
-                        size: 14,
-                        color: i < review.rating
-                            ? Colors.amber
-                            : Colors.grey[300],
-                      ),
-                    const SizedBox(width: 6),
-                    Text(
-                      review.timeAgo,
-                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  review.reviewerName,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 2),
-                Text(review.comment),
-              ],
-            ),
-          ),
-      ],
-    ),
-  );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -313,37 +252,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined),
-
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const CartScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const CartScreen()),
               );
             },
-
           ),
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Foto produk
-            ProductImageWidget(imageUrl: product.imageUrl),
-
-            // 2. Harga + nama
-            ProductInfoWidget(
-              name: product.name,
-              price: product.price,
+            ProductImageWidget(
+              imageUrl: product.imageUrl,
+              images: product.images,
             ),
 
-            // 3. Terjual + rating
+            ProductInfoWidget(
+              name: product.name,
+              price: product.discountedPrice,
+              originalPrice: product.price,
+              discountPercentage: product.discountPercentage,
+            ),
+
             RatingWidget(
               rating: product.rating,
               reviewCount: product.reviewCount,
@@ -356,7 +290,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             _buildQuantity(),
             _gap(),
 
-            // 4. Info toko
             SellerInfoWidget(
               sellerName: product.sellerName,
               sellerLocation: product.sellerLocation,
@@ -365,18 +298,36 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             _gap(),
             _buildDetail(),
             _gap(),
-            _buildReviews(),
+
+            ProductReviewSection(
+              productId: product.id,
+              baseRating: product.rating,
+              canReview: _hasReceived,
+            ),
           ],
         ),
       ),
-      // 5. Tombol bawah
       bottomNavigationBar: ProductActionWidget(
         onChat: () => _showMessage('Fitur chat belum tersedia'),
         onAddToCart: () {
           addToCart(product, quantity);
           _showMessage('$quantity item ditambahkan ke keranjang');
         },
-        onBuyNow: () => _showMessage('Lanjut ke pembayaran ($quantity item)'),
+        onBuyNow: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => CheckoutScreen(
+                products: [product],
+                quantities: {product.id: quantity},
+              ),
+            ),
+          );
+
+          if (result == true && mounted) {
+            Navigator.pop(context); // balik dari detail produk
+          }
+        },
       ),
     );
   }

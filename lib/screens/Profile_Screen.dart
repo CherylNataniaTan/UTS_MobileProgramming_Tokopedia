@@ -4,11 +4,13 @@ import '../models/user_model.dart';
 import '../models/order_model.dart';
 import '../models/voucher_model.dart';
 import '../services/profile_storage_service.dart';
+import '../services/local_account_service.dart';
 import '../services/language_manager.dart';
 import '../widgets/profile_header_widget.dart';
 import '../widgets/order_status_widget.dart';
 import '../widgets/voucher_widget.dart';
 import '../widgets/menu_list_widget.dart';
+import '../data/voucher_data.dart';
 
 import 'edit_profile_screen.dart';
 import 'orders_screen.dart';
@@ -32,46 +34,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    user = UserModel(name: 'Dimas', username: '@dimas', profileImage: '');
+    user = UserModel(name: 'Pengguna', username: '', profileImage: '');
     _loadUserData();
   }
 
   Future<void> _loadUserData() async {
     final savedUser = await _storageService.getUserProfile();
-    if (savedUser != null) {
-      setState(() {
-        user = savedUser;
-      });
-    }
+    if (!mounted) return;
+    setState(() {
+      user = savedUser;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final orders = dummyOrders;
 
-    final vouchers = [
-      VoucherModel(
-        code: 'HEMAT20',
-        discount: '20%',
-        description: 'Diskon maksimal Rp20.000',
-      ),
-      VoucherModel(
-        code: 'GRATISONGKIR',
-        discount: '100%',
-        description: 'Bebas ongkir seluruh Indonesia',
-      ),
-      VoucherModel(
-        code: 'CASHOFF50',
-        discount: '50%',
-        description: 'Cashback khusus pengguna baru',
-      ),
-    ];
+    final vouchers = userVouchers;
 
     final processingCount = orders.where((o) => o.status == 'Diproses').length;
     final shippingCount = orders.where((o) => o.status == 'Dikirim').length;
     final completedCount = orders.where((o) => o.status == 'Selesai').length;
 
-    //buat ubah bahasa sesuai yang dipilih
     return ValueListenableBuilder<String>(
       valueListenable: LanguageManager.appLanguage,
       builder: (context, currentLang, child) {
@@ -235,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
@@ -252,7 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(dialogContext).pop(),
               child: Text(
                 LanguageManager.appLanguage.value == 'en' ? 'Cancel' : 'Batal',
                 style: const TextStyle(color: Colors.grey),
@@ -262,8 +246,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 112, 13, 27),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                // hapus akun yang sedang login
+                await LocalAccountService.clearCurrent();
+
+                if (!dialogContext.mounted) return;
+                Navigator.of(dialogContext).pop();
+
+                if (!mounted) return;
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),

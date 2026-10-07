@@ -1,30 +1,41 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_model.dart';
+import 'local_account_service.dart';
 
 class ProfileStorageService {
-  static const String _keyName = 'user_name';
-  static const String _keyUsername = 'user_username';
-  static const String _keyImagePath = 'user_image_path';
+  Future<String> _prefix() async {
+    final current = await LocalAccountService.getCurrent();
+    final id = (current?['username'] ?? 'guest').toString().toLowerCase();
+    return 'profile_$id';
+  }
 
   // Simpan data
   Future<void> saveUserProfile(UserModel user) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyName, user.name);
-    await prefs.setString(_keyUsername, user.username);
+    final p = await _prefix();
+
+    await prefs.setString('${p}_name', user.name);
+    await prefs.setString('${p}_username', user.username);
 
     if (user.profileImagePath != null) {
-      await prefs.setString(_keyImagePath, user.profileImagePath!);
+      await prefs.setString('${p}_image_path', user.profileImagePath!);
     }
   }
 
-  // Ambil data
   Future<UserModel> getUserProfile() async {
     final prefs = await SharedPreferences.getInstance();
+    final p = await _prefix();
+    final current = await LocalAccountService.getCurrent();
+
+    final defaultName = (current?['name'] ?? 'Pengguna').toString();
+    final defaultUsername =
+        current != null ? '@${current['username']}' : '@pengguna';
+
     return UserModel(
-      name: prefs.getString(_keyName) ?? 'Dimas',
-      username: prefs.getString(_keyUsername) ?? '@dimas',
-      profileImagePath: prefs.getString(_keyImagePath),
+      name: prefs.getString('${p}_name') ?? defaultName,
+      username: prefs.getString('${p}_username') ?? defaultUsername,
+      profileImagePath: prefs.getString('${p}_image_path'),
     );
   }
 }
