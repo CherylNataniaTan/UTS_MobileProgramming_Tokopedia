@@ -1,11 +1,14 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+
 import '../models/product.dart';
 import '../models/shop_model.dart';
 import '../models/order_model.dart';
 import '../widgets/shipping_address_widget.dart';
 import '../widgets/payment_method_widget.dart';
 import '../widgets/order_summary_widget.dart';
+import '../data/untarpay_data.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<Product> products;
@@ -28,6 +31,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String selectedPayment = 'COD';
 
   final int shipping = Random().nextInt(20001) + 5000;
+  
+  bool _processPayment() {
+    if (selectedPayment != 'UntarPay') {
+      return true;
+    }
+
+    int subtotal = 0;
+
+    for (var product in widget.products) {
+      final quantity = widget.quantities[product.id] ?? 1;
+      subtotal += product.price * quantity;
+    }
+
+    final totalPayment = subtotal + shipping;
+
+    if (!UntarPayData.deductBalance(totalPayment)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Saldo UntarPay tidak mencukupi'),
+        ),
+      );
+
+      return false;
+    }
+
+    return true;
+  }
 
   // bikin pesanan di menu transaksi, 1 pesanan per toko (kayak Tokped)
   void _createOrders() {
@@ -93,10 +123,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       appBar: AppBar(
         title: const Text(
           'Checkout',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: primaryRed,
         foregroundColor: Colors.white,
@@ -128,36 +155,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 const SizedBox(height: 10),
 
-                ...widget.products.map(
-                  (product) {
-                    int quantity =
-                        widget.quantities[product.id] ?? 1;
+                ...widget.products.map((product) {
+                  int quantity = widget.quantities[product.id] ?? 1;
 
-                    int totalProduct =
-                        product.price * quantity;
+                  int totalProduct = product.price * quantity;
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${product.name} x$quantity',
-                            ),
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text('${product.name} x$quantity')),
+
+                        Text(
+                          'Rp$totalProduct',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: primaryRed,
                           ),
-
-                          Text(
-                            'Rp$totalProduct',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: primaryRed,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -185,16 +204,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           ElevatedButton(
             onPressed: () {
-              _createOrders();
+               if (!_processPayment()) {
+                  return;
+                }
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Pesanan berhasil dibuat'),
-                ),
-              );
+                _createOrders();
 
-              Navigator.pop(context, true);
-            },
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Pesanan berhasil dibuat'),
+                  ),
+                );
+
+                Navigator.pop(context, true);
+              },
 
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryRed,
@@ -204,10 +227,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             child: const Text(
               'Buat Pesanan',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
         ],

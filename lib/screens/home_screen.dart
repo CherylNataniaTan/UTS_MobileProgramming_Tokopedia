@@ -4,6 +4,8 @@ import '../widgets/search_bar_widget.dart';
 import '../widgets/promo_banner.dart';
 import '../widgets/category_list.dart';
 import '../widgets/product_grid.dart';
+import '../widgets/untarpay_card.dart';
+import 'untarpay_screen.dart';
 
 import '../chat/chat_screen.dart'; 
 import 'cart_screen.dart';
@@ -27,6 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final ScrollController _scrollController = ScrollController();   // ❌ INI HILANG
   bool _showScrollToTop = false;  
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -145,9 +153,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const PromoBanner(),
                   const SizedBox(height: 16),
+
+                  UntarPayCard(
+                    onTap: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UntarPayScreen(),
+                        ),
+                      );
+
+                      if (result == true) {
+                        setState(() {});
+                      }
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
                   const Text(
                     'Kategori',
-                    style: TextStyle(
+                      style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: HomeScreen.darkRed,

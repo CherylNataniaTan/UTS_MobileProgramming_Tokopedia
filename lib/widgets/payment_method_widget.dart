@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data/untarpay_data.dart';
 
 class PaymentMethodWidget extends StatelessWidget {
   final String selectedMethod;
@@ -58,7 +59,7 @@ class PaymentMethodWidget extends StatelessWidget {
           _buildPaymentCard(
             value: 'UntarPay',
             title: 'UntarPay',
-            subtitle: 'Saldo Rp250.000',
+            subtitle: 'Saldo ${UntarPayData.formattedBalance}',
             icon: Icons.account_balance_wallet,
             iconColor: untarPurple,
             isSpecial: true,
