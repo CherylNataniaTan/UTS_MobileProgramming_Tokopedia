@@ -1,11 +1,10 @@
+import 'dart:ui' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 
 import 'models/product.dart';
 import 'screens/main_navigation.dart';
 
-// list keranjang global
 final List<Product> cartItems = [];
-
 
 void main() {
   runApp(const MyApp());
@@ -21,9 +20,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         overscroll: false,
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad,
+        },
       ),
       home: const MainNavigation(),
     );
   }
 }
-

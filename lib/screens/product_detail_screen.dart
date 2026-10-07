@@ -315,7 +315,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined),
-
             onPressed: () {
               Navigator.push(
                 context,
@@ -330,13 +329,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Foto produk
-            ProductImageWidget(imageUrl: product.imageUrl),
+            ProductImageWidget(
+              imageUrl: product.imageUrl,
+              images: product.images,
+            ),
 
-            // 2. Harga + nama
             ProductInfoWidget(name: product.name, price: product.price),
 
-            // 3. Terjual + rating
             RatingWidget(
               rating: product.rating,
               reviewCount: product.reviewCount,
@@ -349,7 +348,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             _buildQuantity(),
             _gap(),
 
-            // 4. Info toko
             SellerInfoWidget(
               sellerName: product.sellerName,
               sellerLocation: product.sellerLocation,
@@ -362,7 +360,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ],
         ),
       ),
-      // 5. Tombol bawah
       bottomNavigationBar: ProductActionWidget(
         onChat: () => _showMessage('Fitur chat belum tersedia'),
         onAddToCart: () {
