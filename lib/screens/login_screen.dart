@@ -31,7 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = true);
 
-    // cek akun yang sudah didaftarkan lewat halaman register
     final account = await LocalAccountService.login(
       _emailController.text,
       _passwordController.text,
@@ -50,8 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return;
     }
-
-    // simpan sesi login biar pas app dibuka lagi nggak perlu login ulang
+    await LocalAccountService.setCurrent(account);
     await AuthService.login(_emailController.text.trim());
 
     if (!mounted) return;
@@ -64,7 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
 
-    // Pindah ke MainNavigation (punya kolom bawah Home, Voucher, Sale, dll)
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const MainNavigation()),

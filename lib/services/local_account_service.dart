@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalAccountService {
   static const String _key = 'registered_accounts';
+  static const String _currentKey = 'current_account';
 
   static Future<List<Map<String, dynamic>>> _loadAccounts() async {
     final prefs = await SharedPreferences.getInstance();
@@ -57,5 +58,24 @@ class LocalAccountService {
       if (matchId && a['password'] == password) return a;
     }
     return null;
+  }
+
+
+  static Future<void> setCurrent(Map<String, dynamic> account) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_currentKey, jsonEncode(account));
+  }
+
+
+  static Future<Map<String, dynamic>?> getCurrent() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_currentKey);
+    if (raw == null) return null;
+    return Map<String, dynamic>.from(jsonDecode(raw));
+  }
+
+  static Future<void> clearCurrent() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_currentKey);
   }
 }

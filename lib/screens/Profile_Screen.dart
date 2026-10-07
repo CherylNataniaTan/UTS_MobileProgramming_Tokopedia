@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../models/user_model.dart';
 import '../models/order_model.dart';
-// import '../models/voucher_model.dart';
+import '../models/voucher_model.dart';
 import '../services/profile_storage_service.dart';
+import '../services/local_account_service.dart';
 import '../services/language_manager.dart';
 import '../widgets/profile_header_widget.dart';
 import '../widgets/order_status_widget.dart';
@@ -33,17 +34,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    user = UserModel(name: 'Dimas', username: '@dimas', profileImage: '');
+    user = UserModel(name: 'Pengguna', username: '', profileImage: '');
     _loadUserData();
   }
 
   Future<void> _loadUserData() async {
     final savedUser = await _storageService.getUserProfile();
-    if (savedUser != null) {
-      setState(() {
-        user = savedUser;
-      });
-    }
+    if (!mounted) return;
+    setState(() {
+      user = savedUser;
+    });
   }
 
   @override
@@ -56,7 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final shippingCount = orders.where((o) => o.status == 'Dikirim').length;
     final completedCount = orders.where((o) => o.status == 'Selesai').length;
 
-    //buat ubah bahasa sesuai yang dipilih
     return ValueListenableBuilder<String>(
       valueListenable: LanguageManager.appLanguage,
       builder: (context, currentLang, child) {
@@ -220,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showLogoutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
@@ -237,7 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(dialogContext).pop(),
               child: Text(
                 LanguageManager.appLanguage.value == 'en' ? 'Cancel' : 'Batal',
                 style: const TextStyle(color: Colors.grey),
@@ -247,8 +246,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 112, 13, 27),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                // hapus akun yang sedang login
+                await LocalAccountService.clearCurrent();
+
+                if (!dialogContext.mounted) return;
+                Navigator.of(dialogContext).pop();
+
+                if (!mounted) return;
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
