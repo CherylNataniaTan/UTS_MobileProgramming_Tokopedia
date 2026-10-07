@@ -334,7 +334,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               images: product.images,
             ),
 
-            ProductInfoWidget(name: product.name, price: product.price),
+            ProductInfoWidget(name: product.name, price: product.discountedPrice),
 
             RatingWidget(
               rating: product.rating,
