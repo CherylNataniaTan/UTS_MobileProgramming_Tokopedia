@@ -1,3 +1,4 @@
+import 'package:UTS_MobileProgramming_Tokopedia/widgets/category_list.dart';
 import 'package:flutter/material.dart';
 
 class CategoryFilterChip extends StatelessWidget {
@@ -12,7 +13,7 @@ class CategoryFilterChip extends StatelessWidget {
     required this.onSelected,
   });
 
-  static const Color green = Color.fromARGB(255, 46, 82, 53);
+  static const Color green = Color(0xFFA01626);
   static const Color gray = Color(0xFF575757);
   static const Color lightGray = Color(0xFFDADAD9);
 
@@ -24,7 +25,7 @@ class CategoryFilterChip extends StatelessWidget {
       onSelected: (_) {
         onSelected();
       },
-      selectedColor: green,
+      selectedColor: CategoryList.darkRed,
       backgroundColor: Colors.white,
       checkmarkColor: Colors.white,
       labelStyle: TextStyle(
