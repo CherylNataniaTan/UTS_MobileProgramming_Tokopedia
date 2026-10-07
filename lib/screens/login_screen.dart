@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:UTS_MobileProgramming_Tokopedia/screens/home_screen.dart';
 
 import '../services/auth_service.dart';
 import '../services/local_account_service.dart';
+import 'main_navigation.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -64,9 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
 
+    // Pindah ke MainNavigation (punya kolom bawah Home, Voucher, Sale, dll)
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const MainNavigation()),
       (route) => false,
     );
   }
