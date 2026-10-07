@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import '../models/user_model.dart';
 import '../services/profile_storage_service.dart';
 
+const Color kMaroon = Color(0xFF700D1B);
+
 class EditProfileScreen extends StatefulWidget {
   final UserModel currentUser;
 
@@ -51,6 +53,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         });
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Gagal membuka gallery atau memilih foto.'),
@@ -75,12 +78,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final storageService = ProfileStorageService();
     await storageService.saveUserProfile(updatedUser);
 
+    if (!mounted) return;
     setState(() => _isLoading = false);
 
-    if (mounted) {
-      //balik ke halaman sebelumnya dengan data yang diperbarui
-      Navigator.pop(context, true);
-    }
+    //balik ke halaman sebelumnya dengan data yang diperbarui
+    Navigator.pop(context, true);
   }
 
   @override
@@ -91,12 +93,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           'Edit Profile',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color.from(
-          alpha: 1,
-          red: 0.439,
-          green: 0.051,
-          blue: 0.106,
-        ),
+        backgroundColor: kMaroon,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: _isLoading
@@ -126,12 +123,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       : 'U',
                                   style: const TextStyle(
                                     fontSize: 40,
-                                    color: Color.from(
-                                      alpha: 1,
-                                      red: 0.439,
-                                      green: 0.051,
-                                      blue: 0.106,
-                                    ),
+                                    color: kMaroon,
                                   ),
                                 )
                               : null,
@@ -140,12 +132,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           onTap: _pickImage,
                           child: const CircleAvatar(
                             radius: 18,
-                            backgroundColor: Color.from(
-                              alpha: 1,
-                              red: 0.439,
-                              green: 0.051,
-                              blue: 0.106,
-                            ),
+                            backgroundColor: kMaroon,
                             child: Icon(
                               Icons.camera_alt,
                               size: 18,
@@ -156,19 +143,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    // PERBAIKAN: onTap diubah menjadi onPressed
                     TextButton(
                       onPressed: _pickImage,
                       child: const Text(
                         'Ganti Foto',
-                        style: TextStyle(
-                          color: Color.from(
-                            alpha: 1,
-                            red: 0.439,
-                            green: 0.051,
-                            blue: 0.106,
-                          ),
-                        ),
+                        style: TextStyle(color: kMaroon),
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -216,26 +195,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           child: OutlinedButton(
                             onPressed: () => Navigator.pop(context),
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                color: Color.from(
-                                  alpha: 1,
-                                  red: 0.439,
-                                  green: 0.051,
-                                  blue: 0.106,
-                                ),
-                              ),
+                              side: const BorderSide(color: kMaroon),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                             ),
                             child: const Text(
                               'Batal',
-                              style: TextStyle(
-                                color: Color.from(
-                                  alpha: 1,
-                                  red: 0.439,
-                                  green: 0.051,
-                                  blue: 0.106,
-                                ),
-                              ),
+                              style: TextStyle(color: kMaroon),
                             ),
                           ),
                         ),
@@ -244,12 +209,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           child: ElevatedButton(
                             onPressed: _saveProfile,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color.from(
-                                alpha: 1,
-                                red: 0.439,
-                                green: 0.051,
-                                blue: 0.106,
-                              ),
+                              backgroundColor: kMaroon,
                               padding: const EdgeInsets.symmetric(vertical: 14),
                             ),
                             child: const Text(

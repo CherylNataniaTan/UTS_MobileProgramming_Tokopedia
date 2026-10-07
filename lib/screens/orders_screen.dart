@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/order_model.dart';
+import 'order_detail_screen.dart';
 
 class OrdersScreen extends StatefulWidget {
   final String initialStatusFilter;
@@ -25,6 +26,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     super.initState();
     _selectedFilter = widget.initialStatusFilter;
+  }
+
+  Color _statusBg(String status) {
+    if (status == 'Selesai') return Colors.green[100]!;
+    if (status == 'Dikirim') return Colors.blue[100]!;
+    return Colors.amber[100]!;
+  }
+
+  Color _statusFg(String status) {
+    if (status == 'Selesai') return Colors.green[900]!;
+    if (status == 'Dikirim') return Colors.blue[900]!;
+    return Colors.amber[900]!;
   }
 
   @override
@@ -91,6 +104,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    OrderDetailScreen(order: order),
+                              ),
+                            );
+                            // refresh, siapa tau status berubah di halaman detail
+                            setState(() {});
+                          },
+                          isThreeLine: order.total > 0,
                           leading: const CircleAvatar(
                             backgroundColor: darkRed,
                             child: Icon(Icons.shopping_bag, color: Colors.white),
@@ -99,20 +124,24 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             order.productName,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text('ID Pesanan: ${order.id}'),
+                          subtitle: Text(
+                            order.total > 0
+                                ? 'ID Pesanan: ${order.id}\nTotal Rp${formatRupiah(order.total)}'
+                                : 'ID Pesanan: ${order.id}',
+                          ),
                           trailing: Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10,
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.amber[100],
+                              color: _statusBg(order.status),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               order.status,
                               style: TextStyle(
-                                color: Colors.amber[900],
+                                color: _statusFg(order.status),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12,
                               ),

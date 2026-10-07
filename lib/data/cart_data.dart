@@ -5,7 +5,9 @@ List<Product> cartProducts = [];
 Map<String, int> cartQuantities = {};
 
 void addToCart(Product product, int quantity) {
-  if (cartProducts.contains(product)) {
+  final exists = cartProducts.any((p) => p.id == product.id);
+
+  if (exists) {
     cartQuantities[product.id] =
         (cartQuantities[product.id] ?? 1) + quantity;
   } else {

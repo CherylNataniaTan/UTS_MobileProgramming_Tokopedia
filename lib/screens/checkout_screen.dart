@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../models/shop_model.dart';
+import '../models/order_model.dart';
 import '../widgets/shipping_address_widget.dart';
 import '../widgets/payment_method_widget.dart';
 import '../widgets/order_summary_widget.dart';
@@ -26,6 +28,54 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String selectedPayment = 'COD';
 
   final int shipping = Random().nextInt(20001) + 5000;
+
+  // bikin pesanan di menu transaksi, 1 pesanan per toko (kayak Tokped)
+  void _createOrders() {
+    final Map<String, List<Product>> grouped = {};
+
+    for (var product in widget.products) {
+      final shop = getShopForProduct(product);
+      grouped.putIfAbsent(shop.id, () => []).add(product);
+    }
+
+    final shippingPerShop = shipping ~/ grouped.length;
+
+    grouped.forEach((shopId, products) {
+      final shop = dummyShops.firstWhere((s) => s.id == shopId);
+
+      final items = products.map((p) {
+        return OrderItem(
+          productName: p.name,
+          imageUrl: p.imageUrl,
+          price: p.price,
+          quantity: widget.quantities[p.id] ?? 1,
+        );
+      }).toList();
+
+      int itemsTotal = 0;
+      for (var item in items) {
+        itemsTotal += item.price * item.quantity;
+      }
+
+      final summaryName = products.length == 1
+          ? products.first.name
+          : '${products.first.name} +${products.length - 1} produk lain';
+
+      dummyOrders.insert(
+        0,
+        OrderModel(
+          id: generateOrderId(),
+          productName: summaryName,
+          status: 'Diproses',
+          shopName: shop.name,
+          items: items,
+          shipping: shippingPerShop,
+          total: itemsTotal + shippingPerShop,
+          paymentMethod: selectedPayment,
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +185,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           ElevatedButton(
             onPressed: () {
+              _createOrders();
+
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Pesanan berhasil dibuat'),

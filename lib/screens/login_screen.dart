@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:UTS_MobileProgramming_Tokopedia/screens/home_screen.dart';
+import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,17 +22,21 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _handleLogin() {
+  Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
+      // simpan sesi login biar pas app dibuka lagi nggak perlu login ulang
+      await AuthService.login(_emailController.text.trim());
+
+      if (!mounted) return;
+
       // Tampilkan pesan sukses login
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login Berhasil! Selamat Datang.'),
-          backgroundColor: Color(0xFFA01626)
+          backgroundColor: Color(0xFFA01626),
         ),
       );
 
-      // PERBAIKAN: Menggunakan HomeScreen() (Huruf Kapital)
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),

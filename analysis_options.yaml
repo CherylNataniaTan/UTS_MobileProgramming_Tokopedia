@@ -11,6 +11,7 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   errors:
+    no_logic_in_create_state: ignore
     unused_element: ignore
     unused_import: ignore
   exclude:
