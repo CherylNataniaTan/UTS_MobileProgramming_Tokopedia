@@ -49,7 +49,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final orders = dummyOrders;
-
     final vouchers = userVouchers;
 
     final processingCount = orders.where((o) => o.status == 'Diproses').length;
@@ -63,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: Colors.grey[100],
           appBar: AppBar(
             title: Text(
-              LanguageManager.getText('my_profile'), // Teks Dinamis
+              LanguageManager.getText('my_profile'),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -147,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HelpScreen(),
+                        builder: (context) => HelpScreen(orders: orders),
                       ),
                     );
                   },
@@ -247,7 +246,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 backgroundColor: const Color.fromARGB(255, 112, 13, 27),
               ),
               onPressed: () async {
-                // hapus akun yang sedang login
                 await LocalAccountService.clearCurrent();
 
                 if (!dialogContext.mounted) return;
