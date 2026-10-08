@@ -44,7 +44,7 @@ class PromoBanner extends StatefulWidget {
 class _PromoBannerState extends State<PromoBanner> {
   int currentIndex = 0;
  
-  static const Color primaryRed = Color(0xFFA01626);
+
  
   final List<PromoItem> banners =  const [
     PromoItem(
