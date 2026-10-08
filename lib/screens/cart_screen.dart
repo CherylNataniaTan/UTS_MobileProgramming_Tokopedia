@@ -24,7 +24,7 @@ class _CartScreenState extends State<CartScreen> {
 
   List<Product> selectedProducts = [];
 
-  // kelompokin produk di keranjang per toko
+
   Map<String, List<Product>> get groupedByShop {
     final Map<String, List<Product>> grouped = {};
 
@@ -131,7 +131,6 @@ class _CartScreenState extends State<CartScreen> {
 
       if (!mounted) return;
 
-      // checkout berhasil -> langsung ke menu transaksi
       Navigator.push(
         context,
         MaterialPageRoute(

@@ -50,7 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     const Color primaryRed = Color(0xFFA01626);
 
-    // Teks dinamis sesuai bahasa
+
     String title = _currentLang == 'en' ? 'Account Settings' : 'Pengaturan Akun';
     String notifTitle = _currentLang == 'en' ? 'Notifications' : 'Notifikasi';
     String notifSub = _currentLang == 'en'

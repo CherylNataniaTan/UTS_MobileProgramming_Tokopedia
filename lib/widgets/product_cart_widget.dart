@@ -10,7 +10,7 @@ class ProductcartWidget extends StatelessWidget {
     required this.product,
   });
 
-  // Fungsi format harga jadi "Rp1.000.000" (disamain sama ProductInfoWidget)
+  // Fungsi format harga jadi "Rp1.000.000"
   String _formatPrice(int price) {
     String priceStr = price.toInt().toString();
     String result = '';

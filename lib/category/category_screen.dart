@@ -21,7 +21,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     'Olahraga', 'Rumah Tangga', 'Buku', 'Mainan',
   ];
 
-  // kategori kamu -> slug kategori DummyJSON
   static const Map<String, List<String>> categoryMap = {
     'Elektronik': ['smartphones', 'laptops', 'tablets', 'mobile-accessories'],
     'Fashion': ['mens-shirts', 'womens-dresses', 'tops', 'mens-shoes', 'womens-shoes'],

@@ -14,7 +14,7 @@ class ProductService {
     throw Exception('Gagal load produk');
   }
 
-  // Semua produk (194 item)
+  // Semua produk
   static Future<List<Product>> fetchProducts({String? category}) async {
     final url = category == null
         ? '$_baseUrl/products?limit=0'

@@ -5,7 +5,7 @@ import '../models/product.dart';
 class ChatMessage {
   final String text;
   final bool isMe;
-  final Product? product; // kalau diisi, pesan ini berupa kartu produk
+  final Product? product; 
   final bool isBot;
   final String time;
 
@@ -39,7 +39,6 @@ class ChatThread {
 
 final ValueNotifier<int> chatUpdate = ValueNotifier<int>(0);
 
-// Jam sekarang, format 08.42
 String nowTime() {
   final now = DateTime.now();
   final h = now.hour.toString().padLeft(2, '0');
@@ -71,8 +70,6 @@ final List<ChatThread> chatThreads = [
   ),
 ];
 
-// Cari chat dengan toko ini, kalau belum ada bikin baru
-// (chat baru otomatis dapat sapaan dari chatbot toko)
 ChatThread getOrCreateThread(String sellerName) {
   for (final thread in chatThreads) {
     if (thread.sellerName.toLowerCase() == sellerName.toLowerCase()) {

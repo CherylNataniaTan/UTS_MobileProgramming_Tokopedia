@@ -30,9 +30,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int quantity = 1;
   bool descExpanded = false;
 
-  // true kalau ada pesanan produk ini yang statusnya Selesai.
-  // CATATAN: 'productName' adalah tebakan nama field di OrderModel,
-  // sesuaikan kalau di model kamu namanya beda (misal 'title' / 'name').
   bool get _hasReceived => dummyOrders.any(
         (o) => o.status == 'Selesai' && o.productName == widget.product.name,
       );
@@ -42,11 +39,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  // Buka chat dengan penjual produk ini (nyambung ke menu Chat)
   void _openChat() {
     final sellerName = widget.product.sellerName;
 
-    // dibuat dulu di sini biar langsung muncul di list Chat
     getOrCreateThread(sellerName);
 
     Navigator.push(
@@ -59,8 +54,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
     );
   }
-
-  // Pembatas antar bagian (abu-abu tebal kayak di Tokopedia)
   Widget _gap() {
     return Container(height: 8, color: sectionGray);
   }
@@ -362,7 +355,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           );
 
           if (result == true && mounted) {
-            Navigator.pop(context); // balik dari detail produk
+            Navigator.pop(context); 
           }
         },
       ),

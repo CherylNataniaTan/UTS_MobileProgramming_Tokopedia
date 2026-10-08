@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/order_model.dart';
 import '../widgets/ticker_builder_widget.dart';
 import 'order_detail_screen.dart';
@@ -19,7 +20,12 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   static const Color darkRed = Color(0xFF700D1B);
-  static const List<String> _filters = ['Semua', 'Diproses', 'Dikirim', 'Selesai'];
+  static const List<String> _filters = [
+    'Semua',
+    'Diproses',
+    'Dikirim',
+    'Selesai',
+  ];
 
   late String _selectedFilter;
 
@@ -59,8 +65,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
           final filteredOrders = _selectedFilter == 'Semua'
               ? widget.orders
               : widget.orders
-                  .where((o) => o.status == _selectedFilter)
-                  .toList();
+                    .where((o) => o.status == _selectedFilter)
+                    .toList();
 
           return Column(
             children: [
@@ -68,8 +74,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 height: 56,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   itemCount: _filters.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 8),
                   itemBuilder: (context, index) {
@@ -83,8 +91,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       backgroundColor: Colors.white,
                       labelStyle: TextStyle(
                         color: selected ? Colors.white : Colors.grey[700],
-                        fontWeight:
-                            selected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: selected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                       ),
                       onSelected: (_) => setState(() => _selectedFilter = f),
                     );
@@ -99,7 +108,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               ? 'Belum ada pesanan'
                               : 'Tidak ada pesanan dengan status "$_selectedFilter"',
                           style: const TextStyle(
-                              fontSize: 16, color: Colors.grey),
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
                         ),
                       )
                     : ListView.builder(
@@ -128,13 +139,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               isThreeLine: order.total > 0,
                               leading: const CircleAvatar(
                                 backgroundColor: darkRed,
-                                child: Icon(Icons.shopping_bag,
-                                    color: Colors.white),
+                                child: Icon(
+                                  Icons.shopping_bag,
+                                  color: Colors.white,
+                                ),
                               ),
                               title: Text(
                                 order.productName,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               subtitle: Text(
                                 order.total > 0

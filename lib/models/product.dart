@@ -40,7 +40,6 @@ class Product {
 
     final thumbnail = json['thumbnail'] ?? '';
 
-    // Foto galeri dari API; kalau kosong, pakai thumbnail saja
     final imageList = (json['images'] as List? ?? [])
         .map((e) => e.toString())
         .toList();

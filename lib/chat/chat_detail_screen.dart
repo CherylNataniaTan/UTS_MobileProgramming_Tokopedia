@@ -87,7 +87,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
   }
 
-  // quickText diisi kalau yang diklik chip balasan cepat
+
   void sendMessage([String? quickText]) {
     final text = (quickText ?? _messageController.text).trim();
     if (text.isEmpty && _attachedProduct == null) {
@@ -115,7 +115,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         );
       }
     });
-    chatUpdate.value++; // kabarin list chat
+    chatUpdate.value++; 
 
     _messageController.clear();
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
@@ -146,7 +146,6 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     );
   }
 
-  // Banner di paling atas chat
   Widget _buildBanner() {
     return Column(
       children: [

@@ -7,7 +7,6 @@ class BahasaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // realtime bahasa yang dipilih di seluruh halaman
     return ValueListenableBuilder<String>(
       valueListenable: LanguageManager.appLanguage,
       builder: (context, currentLang, child) {

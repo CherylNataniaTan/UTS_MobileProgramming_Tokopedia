@@ -12,7 +12,6 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
   final TextEditingController _chatController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  // State manajemen lokal untuk menyimpan riwayat pesan
   final List<Map<String, String>> _messages = [
     {
       'sender': 'bot',

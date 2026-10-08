@@ -54,8 +54,6 @@ class OrderModel {
     return 'Selesai';
   }
 
-  /// Kalau ada layar yang mengubah status manual (misal tombol
-  /// "Pesanan Diterima"), auto-progress dimatikan dan status dikunci.
   set status(String value) {
     _status = value;
     _autoProgress = false;

@@ -36,7 +36,7 @@ class _AlamatPengirimanScreenState extends State<AlamatPengirimanScreen> {
     super.dispose();
   }
 
-  //baca data dari shared preferences
+
   Future<void> _loadAlamatTersimpan() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -49,7 +49,7 @@ class _AlamatPengirimanScreenState extends State<AlamatPengirimanScreen> {
     });
   }
 
-  //nyimpan data ke shared preferences
+
   Future<void> _simpanAlamat() async {
     String nama = _namaController.text.trim();
     String telepon = _teleponController.text.trim();
@@ -253,7 +253,7 @@ class _AlamatPengirimanScreenState extends State<AlamatPengirimanScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Tandai Sebagai Rumah/Kantor
+     
             const Text(
               'Tandai Sebagai:',
               style: TextStyle(fontWeight: FontWeight.bold),
