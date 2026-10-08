@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../chat/chat_data.dart';
 import '../chat/chat_detail_screen.dart';
 import '../data/cart_data.dart';
+import '../data/product_description.dart';
 import '../models/order_model.dart';
 import '../models/product.dart';
 import '../widgets/product_image_widget.dart';
@@ -23,12 +24,15 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  static const Color green = Color(0xFF03AC0E);
+  static const Color primaryRed = Color(0xFFA01626);
   static const Color sectionGray = Color(0xFFF3F4F5);
 
   int quantity = 1;
   bool descExpanded = false;
 
+  // true kalau ada pesanan produk ini yang statusnya Selesai.
+  // CATATAN: 'productName' adalah tebakan nama field di OrderModel,
+  // sesuaikan kalau di model kamu namanya beda (misal 'title' / 'name').
   bool get _hasReceived => dummyOrders.any(
         (o) => o.status == 'Selesai' && o.productName == widget.product.name,
       );
@@ -37,9 +41,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
   }
+
+  // Buka chat dengan penjual produk ini (nyambung ke menu Chat)
   void _openChat() {
     final sellerName = widget.product.sellerName;
 
+    // dibuat dulu di sini biar langsung muncul di list Chat
     getOrCreateThread(sellerName);
 
     Navigator.push(
@@ -52,6 +59,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
     );
   }
+
+  // Pembatas antar bagian (abu-abu tebal kayak di Tokopedia)
   Widget _gap() {
     return Container(height: 8, color: sectionGray);
   }
@@ -63,7 +72,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _infoRow(String label, String value, {bool isGreen = false}) {
+  Widget _infoRow(String label, String value, {bool isRed = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -79,7 +88,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             value,
             style: TextStyle(
               fontSize: 14,
-              color: isGreen ? green : Colors.black87,
+              color: isRed ? primaryRed : Colors.black87,
             ),
           ),
         ],
@@ -158,7 +167,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: Icon(
                       Icons.remove,
                       size: 20,
-                      color: quantity > 1 ? green : Colors.grey[400],
+                      color: quantity > 1 ? primaryRed : Colors.grey[400],
                     ),
                   ),
                 ),
@@ -178,7 +187,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(6),
-                    child: Icon(Icons.add, size: 20, color: green),
+                    child: Icon(Icons.add, size: 20, color: primaryRed),
                   ),
                 ),
               ],
@@ -190,6 +199,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildDetail() {
+    final paragraphs = buildDescription(widget.product);
+
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -199,17 +210,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           const SizedBox(height: 8),
           _infoRow('Kondisi', 'Baru'),
           _infoRow('Min. Pemesanan', '1 Buah'),
-          _infoRow('Kategori', widget.product.category, isGreen: true),
-          const Divider(height: 24),
-          Text(
-            widget.product.description,
-            maxLines: descExpanded ? null : 2,
-            overflow: descExpanded
-                ? TextOverflow.visible
-                : TextOverflow.ellipsis,
-            style: const TextStyle(height: 1.4),
+          _infoRow(
+            'Kategori',
+            categoryLabel(widget.product.category),
+            isRed: true,
           ),
-          const SizedBox(height: 8),
+          const Divider(height: 24),
+
+
+          if (descExpanded)
+            for (final paragraph in paragraphs) ...[
+              Text(paragraph, style: const TextStyle(height: 1.5)),
+              const SizedBox(height: 10),
+            ]
+          else
+            Text(
+              paragraphs.first,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(height: 1.5),
+            ),
+
+          const SizedBox(height: 4),
           InkWell(
             onTap: () {
               setState(() {
@@ -218,7 +240,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             },
             child: Text(
               descExpanded ? 'Lihat Lebih Sedikit' : 'Selengkapnya',
-              style: const TextStyle(color: green, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: primaryRed,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
@@ -238,6 +263,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 0,
+        // Kotak pencarian, cuma tampilan aja
         title: Container(
           height: 38,
           padding: const EdgeInsets.symmetric(horizontal: 10),
