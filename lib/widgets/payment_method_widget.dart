@@ -76,21 +76,15 @@ class PaymentMethodWidget extends StatelessWidget {
             iconColor: Colors.blue,
           ),
 
-<<<<<<< HEAD
           const SizedBox(height: 10),
 
           // E-Wallet
           _buildPaymentCard(
-=======
-          RadioListTile<String>(
-            title: const Text('E-Wallet'),
-            subtitle: const Text('UntarPay'),
->>>>>>> 0a382f3615f643065adf20e2c4ebb87acda29df4
-            value: 'E-Wallet',
-            title: 'E-Wallet',
-            subtitle: 'GoPay',
-            icon: Icons.phone_android,
-            iconColor: Colors.green,
+          value: 'E-Wallet',
+              title: 'E-Wallet',
+              subtitle: 'GoPay',
+              icon: Icons.phone_android,
+              iconColor: Colors.green,
           ),
 
           const SizedBox(height: 10),
