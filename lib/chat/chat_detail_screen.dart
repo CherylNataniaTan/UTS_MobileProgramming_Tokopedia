@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../models/product.dart';
+import 'chat_bot.dart';
 import 'chat_data.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   final String sellerName;
-  final Product? product; // diisi kalau chat dibuka dari detail produk
+  final Product? product; 
 
   const ChatDetailScreen({super.key, required this.sellerName, this.product});
 
@@ -28,6 +29,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   late final ChatThread _thread;
 
   Product? _attachedProduct;
+
+  int _pendingReplies = 0;
 
   @override
   void initState() {
@@ -61,6 +64,28 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     }
     return 'Rp$buffer';
   }
+  Future<void> _botReply(String reply) async {
+    setState(() {
+      _pendingReplies++;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+
+    await Future.delayed(const Duration(milliseconds: 1300));
+
+    _thread.messages.add(
+      ChatMessage(text: reply, isMe: false, isBot: true, time: nowTime()),
+    );
+    chatUpdate.value++;
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _pendingReplies--;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+  }
 
   // quickText diisi kalau yang diklik chip balasan cepat
   void sendMessage([String? quickText]) {
@@ -69,13 +94,15 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       return;
     }
 
+    final sentProduct = _attachedProduct;
+
     setState(() {
-      if (_attachedProduct != null) {
+      if (sentProduct != null) {
         _thread.messages.add(
           ChatMessage(
             text: '',
             isMe: true,
-            product: _attachedProduct,
+            product: sentProduct,
             time: nowTime(),
           ),
         );
@@ -92,6 +119,13 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
     _messageController.clear();
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+
+    // toko bales
+    if (text.isNotEmpty) {
+      _botReply(getBotReply(text, product: widget.product));
+    } else if (sentProduct != null) {
+      _botReply(getProductOnlyReply(sentProduct));
+    }
   }
 
   Widget _buildProductImage(Product product, double size) {
@@ -150,7 +184,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     );
   }
 
-  // Pesan berupa kartu produk
+
   Widget _buildProductBubble(ChatMessage message) {
     final product = message.product!;
 
@@ -245,6 +279,30 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               ),
             ],
           ],
+        ),
+      ),
+    );
+  }
+
+  // Bubble "sedang mengetik..." dari toko
+  Widget _buildTypingBubble() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          'Sedang mengetik...',
+          style: TextStyle(
+            fontSize: 13,
+            fontStyle: FontStyle.italic,
+            color: Colors.grey[500],
+          ),
         ),
       ),
     );
@@ -381,6 +439,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final showTyping = _pendingReplies > 0;
+    final messageCount = _thread.messages.length;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: AppBar(
@@ -389,10 +450,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         titleSpacing: 0,
         title: Row(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 16,
               backgroundColor: Colors.white,
-              child: const Icon(Icons.storefront, size: 18, color: primaryRed),
+              child: Icon(Icons.storefront, size: 18, color: primaryRed),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -414,11 +475,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             child: ListView.builder(
               controller: _scrollController,
               padding: const EdgeInsets.all(12),
-              // index 0 = banner, sisanya pesan
-              itemCount: _thread.messages.length + 1,
+              itemCount: messageCount + 1 + (showTyping ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return _buildBanner();
+                }
+
+                if (index == messageCount + 1) {
+                  return _buildTypingBubble();
                 }
 
                 final message = _thread.messages[index - 1];
