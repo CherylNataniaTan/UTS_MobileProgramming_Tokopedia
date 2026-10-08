@@ -9,6 +9,9 @@ class FlashSaleScreen extends StatefulWidget {
 
   static const Color primaryRed = Color(0xFFA01626);
 
+  // produk dianggap flash sale kalau diskonnya segini atau lebih
+  static const double minDiscount = 15;
+
   @override
   State<FlashSaleScreen> createState() => _FlashSaleScreenState();
 }
@@ -43,9 +46,16 @@ class _FlashSaleScreenState extends State<FlashSaleScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
+          // ambil yang diskonnya cukup besar, urut dari diskon terbesar
           final flashSaleProducts = snapshot.data!
-              .where((product) => product.discountPercentage >= 15)
-              .toList();
+              .where(
+                (product) =>
+                    product.discountPercentage >= FlashSaleScreen.minDiscount,
+              )
+              .toList()
+            ..sort(
+              (a, b) => b.discountPercentage.compareTo(a.discountPercentage),
+            );
 
           if (flashSaleProducts.isEmpty) {
             return const Center(child: Text('Belum ada produk flash sale.'));
@@ -53,7 +63,17 @@ class _FlashSaleScreenState extends State<FlashSaleScreen> {
 
           return Padding(
             padding: const EdgeInsets.all(16),
-            child: ProductGrid(products: flashSaleProducts),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${flashSaleProducts.length} produk lagi diskon',
+                  style: TextStyle(color: Colors.grey[700], fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                Expanded(child: ProductGrid(products: flashSaleProducts)),
+              ],
+            ),
           );
         },
       ),

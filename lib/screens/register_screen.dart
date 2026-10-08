@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../services/local_account_service.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -45,6 +46,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  String? _validateEmail(String? v) {
+    final value = v?.trim() ?? '';
+    if (value.isEmpty) return 'Email wajib diisi';
+
+    final ok = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@gmail\.com$',
+      caseSensitive: false,
+    ).hasMatch(value);
+
+    return ok ? null : 'Email harus berformat nama@gmail.com';
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -69,7 +82,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Akun berhasil dibuat, silakan login')),
     );
-    // kirim username balik ke halaman login supaya bisa terisi otomatis
     Navigator.pop(context, _usernameC.text.trim());
   }
 
@@ -110,7 +122,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   TextFormField(
                     controller: _nameC,
-                    decoration: _decoration('Nama Lengkap', Icons.badge_outlined),
+                    decoration: _decoration(
+                      'Nama Lengkap',
+                      Icons.badge_outlined,
+                    ),
                     validator: (v) => (v == null || v.trim().isEmpty)
                         ? 'Nama wajib diisi'
                         : null,
@@ -121,20 +136,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: _emailC,
                     keyboardType: TextInputType.emailAddress,
                     decoration: _decoration('Email', Icons.email_outlined),
-                    validator: (v) {
-                      final value = v?.trim() ?? '';
-                      if (value.isEmpty) return 'Email wajib diisi';
-                      final ok = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
-                          .hasMatch(value);
-                      return ok ? null : 'Format email tidak valid';
-                    },
+                    validator: _validateEmail,
                   ),
                   const SizedBox(height: 16),
 
                   TextFormField(
                     controller: _usernameC,
-                    decoration:
-                        _decoration('Username', Icons.alternate_email),
+                    decoration: _decoration('Username', Icons.alternate_email),
                     validator: (v) {
                       final value = v?.trim() ?? '';
                       if (value.isEmpty) return 'Username wajib diisi';
@@ -154,11 +162,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       'Password',
                       Icons.lock_outline,
                       suffix: IconButton(
-                        icon: Icon(_hidePass
-                            ? Icons.visibility_off
-                            : Icons.visibility),
-                        onPressed: () =>
-                            setState(() => _hidePass = !_hidePass),
+                        icon: Icon(
+                          _hidePass ? Icons.visibility_off : Icons.visibility,
+                        ),
+                        onPressed: () => setState(() => _hidePass = !_hidePass),
                       ),
                     ),
                     validator: (v) {
@@ -176,9 +183,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       'Konfirmasi Password',
                       Icons.lock_reset,
                       suffix: IconButton(
-                        icon: Icon(_hideConfirm
-                            ? Icons.visibility_off
-                            : Icons.visibility),
+                        icon: Icon(
+                          _hideConfirm
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
                         onPressed: () =>
                             setState(() => _hideConfirm = !_hideConfirm),
                       ),
@@ -223,8 +232,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Sudah punya akun? ',
-                          style: TextStyle(color: Colors.grey[600])),
+                      Text(
+                        'Sudah punya akun? ',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: const Text(
