@@ -48,17 +48,17 @@ class _PromoBannerState extends State<PromoBanner> {
  
   final List<PromoItem> banners =  const [
     PromoItem(
-      imageUrl: 'https://picsum.photos/seed/promo1/800/400',
+      imageUrl: 'assets/promobanner1.png',
       title: 'Promo Spesial Hari Ini!',
       target: 'voucher',
     ),
     PromoItem(
-      imageUrl: 'https://picsum.photos/seed/promo2/800/400',
+      imageUrl: 'assets/promobanner2.png',
       title: 'Flash Sale, Diskon Gede-gedean!',
       target: 'flashsale',
     ),
     PromoItem(
-      imageUrl: 'https://picsum.photos/seed/promo3/800/400',
+      imageUrl: 'assets/promobanner3.png',
       title: 'Diskon hingga 50% untuk Member Baru',
       target: 'voucher',
     ),
@@ -102,43 +102,24 @@ class _PromoBannerState extends State<PromoBanner> {
  
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
-      child: SizedBox(
-        height: 140,
-        width: double.infinity,
+      child: AspectRatio(
+        aspectRatio: 2,
         child: Stack(
           fit: StackFit.expand,
           children: [
-            GestureDetector(
-              onTap: openBannerPage,
-              child: Image.network(
-                banner.imageUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
-            
-            IgnorePointer(
-              child: Container(
-                color: Colors.black.withOpacity(0.35),
-              ),
-            ),
- 
-            IgnorePointer(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Text(
-                    banner.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
+          GestureDetector(
+            onTap: openBannerPage,
+            child: banner.imageUrl.startsWith('http')
+                ? Image.network(
+                    banner.imageUrl,
+                    fit: BoxFit.cover,
+                   )
+                 : Image.asset(
+                     banner.imageUrl,
+                     fit: BoxFit.cover,
+                   ),
+),
+  
           Positioned(
             left: 8,
             top: 0,
