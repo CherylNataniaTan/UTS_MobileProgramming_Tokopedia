@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../screens/voucher_screen.dart';
@@ -24,12 +25,10 @@ final List<VoucherModel> _promoVouchers = [
 
 class PromoItem {
   final String imageUrl;
-  final String title;
-  final String target;
- 
+  final String target; // 'voucher' atau 'flashsale'
+
   const PromoItem({
-    required this.imageUrl, 
-    required this.title, 
+    required this.imageUrl,
     required this.target,
   });
 }
@@ -40,45 +39,62 @@ class PromoBanner extends StatefulWidget {
   @override
   State<PromoBanner> createState() => _PromoBannerState();
 }
- 
+
 class _PromoBannerState extends State<PromoBanner> {
   int currentIndex = 0;
- 
+  Timer? _timer;
 
- 
-  final List<PromoItem> banners =  const [
+  final List<PromoItem> banners = const [
     PromoItem(
       imageUrl: 'assets/promobanner1.png',
-      title: 'Promo Spesial Hari Ini!',
       target: 'voucher',
     ),
     PromoItem(
       imageUrl: 'assets/promobanner2.png',
-      title: 'Flash Sale, Diskon Gede-gedean!',
       target: 'flashsale',
     ),
     PromoItem(
       imageUrl: 'assets/promobanner3.png',
-      title: 'Diskon hingga 50% untuk Member Baru',
       target: 'voucher',
     ),
   ];
- 
+
+  @override
+  void initState() {
+    super.initState();
+    startAutoScroll();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void startAutoScroll() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (mounted) {
+        showNextBanner();
+      }
+    });
+  }
+
   void showNextBanner() {
     setState(() {
       currentIndex = (currentIndex + 1) % banners.length;
     });
   }
- 
+
   void showPreviousBanner() {
     setState(() {
       currentIndex = (currentIndex - 1 + banners.length) % banners.length;
     });
   }
-  
+
   void openBannerPage() {
     final target = banners[currentIndex].target;
- 
+
     if (target == 'flashsale') {
       Navigator.push(
         context,
@@ -98,8 +114,8 @@ class _PromoBannerState extends State<PromoBanner> {
 
   @override
   Widget build(BuildContext context) {
-     final banner = banners[currentIndex];
- 
+    final banner = banners[currentIndex];
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: AspectRatio(
@@ -107,41 +123,47 @@ class _PromoBannerState extends State<PromoBanner> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-          GestureDetector(
-            onTap: openBannerPage,
-            child: banner.imageUrl.startsWith('http')
-                ? Image.network(
-                    banner.imageUrl,
-                    fit: BoxFit.cover,
-                   )
-                 : Image.asset(
-                     banner.imageUrl,
-                     fit: BoxFit.cover,
-                   ),
-),
-  
-          Positioned(
-            left: 8,
-            top: 0,
-            bottom: 0,
+            GestureDetector(
+              onTap: openBannerPage,
+              child: banner.imageUrl.startsWith('http')
+                  ? Image.network(
+                      banner.imageUrl,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      banner.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
+            ),
+
+            Positioned(
+              left: 8,
+              top: 0,
+              bottom: 0,
               child: Center(
-               child: GestureDetector(
-                onTap: showPreviousBanner,
-                child: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                  size: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    showPreviousBanner();
+                    startAutoScroll();
+                  },
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            right: 8,
-            top: 0,
-            bottom: 0,
+            Positioned(
+              right: 8,
+              top: 0,
+              bottom: 0,
               child: Center(
                 child: GestureDetector(
-                  onTap: showNextBanner,
+                  onTap: () {
+                    showNextBanner();
+                    startAutoScroll();
+                  },
                   child: const Icon(
                     Icons.arrow_forward_ios,
                     color: Colors.white,
