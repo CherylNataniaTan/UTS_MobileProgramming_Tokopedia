@@ -7,8 +7,6 @@ class BahasaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryRed = Color(0xFFA01626);
-
     // realtime bahasa yang dipilih di seluruh halaman
     return ValueListenableBuilder<String>(
       valueListenable: LanguageManager.appLanguage,

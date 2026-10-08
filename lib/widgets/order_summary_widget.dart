@@ -18,7 +18,8 @@ class OrderSummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int total = subtotal -
+    final int total =
+        subtotal -
         productDiscount +
         shipping -
         shippingDiscount -
@@ -32,19 +33,13 @@ class OrderSummaryWidget extends StatelessWidget {
         children: [
           const Text(
             'Rincian Pembayaran',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 15),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Subtotal Produk'),
-              Text('Rp$subtotal'),
-            ],
+            children: [const Text('Subtotal Produk'), Text('Rp$subtotal')],
           ),
 
           const SizedBox(height: 8),
@@ -55,9 +50,7 @@ class OrderSummaryWidget extends StatelessWidget {
               const Text('Diskon Produk'),
               Text(
                 '-Rp$productDiscount',
-                style: const TextStyle(
-                  color: Colors.red,
-                ),
+                style: const TextStyle(color: Colors.red),
               ),
             ],
           ),
@@ -66,10 +59,7 @@ class OrderSummaryWidget extends StatelessWidget {
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Ongkos Kirim'),
-              Text('Rp$shipping'),
-            ],
+            children: [const Text('Ongkos Kirim'), Text('Rp$shipping')],
           ),
 
           const SizedBox(height: 8),
@@ -80,9 +70,7 @@ class OrderSummaryWidget extends StatelessWidget {
               const Text('Diskon Pengiriman'),
               Text(
                 '-Rp$shippingDiscount',
-                style: const TextStyle(
-                  color: Colors.red,
-                ),
+                style: const TextStyle(color: Colors.red),
               ),
             ],
           ),
@@ -95,9 +83,7 @@ class OrderSummaryWidget extends StatelessWidget {
               const Text('Voucher Diskon'),
               Text(
                 '-Rp$voucherDiscount',
-                style: const TextStyle(
-                  color: Colors.red,
-                ),
+                style: const TextStyle(color: Colors.red),
               ),
             ],
           ),
@@ -109,9 +95,7 @@ class OrderSummaryWidget extends StatelessWidget {
             children: [
               const Text(
                 'Total Pembayaran',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
                 'Rp$total',
