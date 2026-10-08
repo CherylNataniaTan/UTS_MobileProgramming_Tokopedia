@@ -12,7 +12,7 @@ class ProductActionWidget extends StatelessWidget {
     required this.onBuyNow,
   });
 
-  static const Color green = Color(0xFF03AC0E);
+  static const Color green = Color(0xFFA01626);
 
   @override
   Widget build(BuildContext context) {

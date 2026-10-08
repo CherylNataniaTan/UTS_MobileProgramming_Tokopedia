@@ -20,7 +20,7 @@ class ProductReviewSection extends StatefulWidget {
 }
 
 class _ProductReviewSectionState extends State<ProductReviewSection> {
-  static const Color green = Color(0xFF03AC0E);
+  static const Color green = Color(0xFFA01626);
 
   List<ProductReview> _userReviews = [];
   late final List<ProductReview> _generated;
