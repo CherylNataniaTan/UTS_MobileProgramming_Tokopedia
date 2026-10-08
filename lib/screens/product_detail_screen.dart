@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../chat/chat_data.dart';
+import '../chat/chat_detail_screen.dart';
 import '../data/cart_data.dart';
 import '../models/order_model.dart';
 import '../models/product.dart';
@@ -27,9 +29,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int quantity = 1;
   bool descExpanded = false;
 
-  // true kalau ada pesanan produk ini yang statusnya Selesai.
-  // CATATAN: 'productName' adalah tebakan nama field di OrderModel,
-  // sesuaikan kalau di model kamu namanya beda (misal 'title' / 'name').
   bool get _hasReceived => dummyOrders.any(
         (o) => o.status == 'Selesai' && o.productName == widget.product.name,
       );
@@ -38,8 +37,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
   }
+  void _openChat() {
+    final sellerName = widget.product.sellerName;
 
-  // Pembatas antar bagian (abu-abu tebal kayak di Tokopedia)
+    getOrCreateThread(sellerName);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChatDetailScreen(
+          sellerName: sellerName,
+          product: widget.product,
+        ),
+      ),
+    );
+  }
   Widget _gap() {
     return Container(height: 8, color: sectionGray);
   }
@@ -226,7 +238,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         titleSpacing: 0,
-        // Kotak pencarian, cuma tampilan aja
         title: Container(
           height: 38,
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -308,7 +319,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
       ),
       bottomNavigationBar: ProductActionWidget(
-        onChat: () => _showMessage('Fitur chat belum tersedia'),
+        onChat: _openChat,
         onAddToCart: () {
           addToCart(product, quantity);
           _showMessage('$quantity item ditambahkan ke keranjang');

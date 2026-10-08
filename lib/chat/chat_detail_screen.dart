@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ChatMessage {
-  final String text;
-  final bool isMe;
-
-  ChatMessage({required this.text, required this.isMe});
-}
+import '../models/product.dart';
+import 'chat_data.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   final String sellerName;
+  final Product? product; 
 
-  const ChatDetailScreen({super.key, required this.sellerName});
+  const ChatDetailScreen({super.key, required this.sellerName, this.product});
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -20,11 +17,29 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   static const Color primaryRed = Color(0xFFA01626);
 
   final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
-  final List<ChatMessage> _messages = [
-    ChatMessage(text: 'Halo kak, produknya masih ada?', isMe: false),
-    ChatMessage(text: 'Ada kak, ready stock', isMe: true),
-  ];
+  late final ChatThread _thread;
+
+  @override
+  void initState() {
+    super.initState();
+    _thread = getOrCreateThread(widget.sellerName);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  }
 
   void sendMessage() {
     final text = _messageController.text.trim();
@@ -33,10 +48,63 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     }
 
     setState(() {
-      _messages.add(ChatMessage(text: text, isMe: true));
+      _thread.messages.add(ChatMessage(text: text, isMe: true));
     });
+    chatUpdate.value++; // kabarin list chat
 
     _messageController.clear();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+  }
+
+  Widget _buildProductInfo(Product product) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
+      ),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: Image.network(
+              product.imageUrl,
+              width: 44,
+              height: 44,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                width: 44,
+                height: 44,
+                color: Colors.grey[200],
+                child: const Icon(Icons.image_not_supported, size: 20),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 13),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Rp${product.discountedPrice}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -55,12 +123,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       ),
       body: Column(
         children: [
+          if (widget.product != null) _buildProductInfo(widget.product!),
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               padding: const EdgeInsets.all(12),
-              itemCount: _messages.length,
+              itemCount: _thread.messages.length,
               itemBuilder: (context, index) {
-                final message = _messages[index];
+                final message = _thread.messages[index];
 
                 return Align(
                   alignment: message.isMe
@@ -87,40 +157,47 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Tulis pesan...',
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide.none,
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      onSubmitted: (_) => sendMessage(),
+                      decoration: InputDecoration(
+                        hintText: 'Tulis pesan...',
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: BorderSide.none,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: sendMessage,
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: const BoxDecoration(
-                      color: primaryRed,
-                      shape: BoxShape.circle,
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: sendMessage,
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
+                        color: primaryRed,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.send,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    child: const Icon(Icons.send, color: Colors.white, size: 20),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
